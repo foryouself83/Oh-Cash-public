@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--이곳에 정의하게되면 자동으로 APP에 등록-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/PopupCash.Controls;component/Themes/Styles/HolderTextBox.xaml" />
+
+        <ResourceDictionary Source="/PopupCash.Controls;component/Themes/Styles/AccumulateItemButton.xaml" />
+        <ResourceDictionary Source="/PopupCash.Controls;component/Themes/Styles/ImageButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>    
+</ResourceDictionary>

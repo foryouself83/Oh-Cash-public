@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BusyIndicators" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PopupCash.Controls\PopupCash.Controls.csproj" />
+    <ProjectReference Include="..\PopupCash.Core\PopupCash.Core.csproj" />
+    <ProjectReference Include="..\PopupCash.Database\PopupCash.Database.csproj" />
+  </ItemGroup>
+
+</Project>

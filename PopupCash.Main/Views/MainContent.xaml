@@ -1,0 +1,311 @@
+﻿<UserControl x:Class="PopupCash.Main.Views.MainContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
+             xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
+             xmlns:converters="clr-namespace:PopupCash.Core.Presentation.Converters;assembly=PopupCash.Core"
+             xmlns:mainConverters="clr-namespace:PopupCash.Main.Presentation.Converters"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="Transparent"
+             BorderBrush="Transparent"
+             BorderThickness="0"
+             Padding="0"
+             MinHeight="194"
+             MinWidth="452">    
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PopupCash.Core;component/Templates/Colors.xaml" />
+                <ResourceDictionary Source="/PopupCash.Main;component/Templates/Images/MainImages.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <mainConverters:CashToStringConverter x:Key="CashToStringConverter" />
+            <mainConverters:MissionPointToStringConverter x:Key="MissionPointToStringConverter" />
+            <converters:BooleanToInverseBooleanConverter x:Key="BooleanToInverseBooleanConverter" />
+            <converters:EmptyStringToBooleanConverter x:Key="EmptyStringToBooleanConverter" />
+            <converters:PointToStringConverter x:Key="PointToStringConverter" />
+
+            <Geometry x:Key="chevronRight">M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z</Geometry>
+
+
+            <DrawingImage x:Key="pointImage">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V17.707 H18.914 V0 H0 Z">
+                        <DrawingGroup.Transform>
+                            <TranslateTransform X="2"
+                                                Y="5.1803326606750488" />
+                        </DrawingGroup.Transform>
+                        <DrawingGroup Opacity="1">
+                            <DrawingGroup Transform="1,0,0,1,5.693,-25.954">
+                                <GeometryDrawing Geometry="F1 M18.914,17.707z M0,0z M1.5,29.645L1.5,31.861C1.5,33.196 3.99,34.278 7.061,34.278 10.132,34.278 12.621,33.196 12.621,31.861L12.621,29.645">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#FFCCCCCC"
+                                             Thickness="1.2"
+                                             StartLineCap="Round"
+                                             EndLineCap="Round"
+                                             LineJoin="Round" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,5.693,-23.218">
+                                <GeometryDrawing Geometry="F1 M18.914,17.707z M0,0z M1.5,29.645L1.5,31.861C1.5,33.196 3.99,34.278 7.061,34.278 10.132,34.278 12.621,33.196 12.621,31.861L12.621,29.645">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#FFCCCCCC"
+                                             Thickness="1.2"
+                                             StartLineCap="Round"
+                                             EndLineCap="Round"
+                                             LineJoin="Round" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,5.693,-20.515">
+                                <GeometryDrawing Geometry="F1 M18.914,17.707z M0,0z M1.5,29.645L1.5,31.861C1.5,33.196 3.99,34.278 7.061,34.278 10.132,34.278 12.621,33.196 12.621,31.861L12.621,29.645">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#FFCCCCCC"
+                                             Thickness="1.2"
+                                             StartLineCap="Round"
+                                             EndLineCap="Round"
+                                             LineJoin="Round" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,5.693,-15.91">
+                                <GeometryDrawing Geometry="F1 M18.914,17.707z M0,0z M12.621,18.926C12.621,20.262 10.131,21.343 7.061,21.343 3.991,21.343 1.5,20.262 1.5,18.926 1.5,17.59 3.99,16.51 7.061,16.51 10.132,16.51 12.621,17.592 12.621,18.926z">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#FFCCCCCC"
+                                             Thickness="1.2"
+                                             StartLineCap="Round"
+                                             EndLineCap="Round"
+                                             LineJoin="Round" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,-42.446,-38.3">
+                                <GeometryDrawing Brush="#FFFBFBFF"
+                                                 Geometry="F1 M18.914,17.707z M0,0z M55.317,49.271A6.136,6.136,0,1,1,49.181,43.135A6.136,6.136,0,0,1,55.317,49.271">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="#FFCCCCCC"
+                                             Thickness="1.2"
+                                             StartLineCap="Flat"
+                                             EndLineCap="Flat"
+                                             LineJoin="Miter" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                            <DrawingGroup Opacity="1"
+                                          Transform="1,0,0,1,6.864,13.218">
+                                <GeometryDrawing Brush="#FFCCCCCC"
+                                                 Geometry="F1 M18.914,17.707z M0,0z M0.563,-1.9A0.815,0.815,0,0,0,1.229,-2.2A1.236,1.236,0,0,0,1.474,-3.008A1.236,1.236,0,0,0,1.229,-3.816A0.815,0.815,0,0,0,0.563,-4.116L-0.815,-4.116 -0.815,-1.9z M-2,-5.18L0.6,-5.18A2.064,2.064,0,0,1,1.667,-4.905A1.9,1.9,0,0,1,2.395,-4.134A2.386,2.386,0,0,1,2.656,-3.006A2.386,2.386,0,0,1,2.4,-1.879A1.9,1.9,0,0,1,1.672,-1.108A2.064,2.064,0,0,1,0.6,-0.834L-0.815,-0.834 -0.815,1.036 -2,1.036z" />
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <behaviors:Interaction.Behaviors>
+        <!--윈도우를 이동시키는 Behavior-->
+        <coreBehaviors:DragWindowBehavior />
+    </behaviors:Interaction.Behaviors>
+    
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding LoadedWindowCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <buttons:ImageButton CornerRadius="0"
+                                     Background="Transparent"
+                                     Text="오테크"
+                                     TextPadding="6.2 0 0 0"
+                                     ImageWidth="24"
+                                     ImageHeight="24"
+                                     FontSize="18"
+                                     FontWeight="DemiBold"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     IsHitTestVisible="False"
+                                     ImageSource="{StaticResource popupCashLogo}"
+                                     Margin="12 0 0 0">
+                </buttons:ImageButton>
+            </Grid>
+            <Grid Grid.Column="1">
+                <StackPanel x:Name="stackPaneluserName" Orientation="Horizontal" 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Visibility="{Binding IsMember, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}"
+                            Margin="0 16 16 0">
+                    <buttons:ImageButton Text="{Binding User.Name}"
+                                         FontSize="15"
+                                         FontWeight="Bold"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center">
+                    </buttons:ImageButton>
+                    <TextBlock Text=" 님"
+                               FontSize="15"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <buttons:ImageButton Text="로그인/회원가입"
+                                     TextPadding="0"
+                                     FontSize="15"
+                                     Margin="0 0 15 0"
+                                     FontWeight="Bold"
+                                     CornerRadius="15"
+                                     HorizontalContentAlignment="Right"
+                                     VerticalContentAlignment="Center"                                     
+                                     Command="{Binding GotoLoginDialogCommand}"
+                                     IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToInverseBooleanConverter}}"
+                                     Visibility="{Binding IsMember, Converter={StaticResource InverseBooleanToVIsibilityConverter}}">
+                    <buttons:ImageButton.Style>
+                        <Style TargetType="{x:Type buttons:ImageButton}">
+                            <Setter Property="FontFamily"
+                                    Value="/PopupCash.Core;Component/Resources/Fonts/#SUIT" />
+                            <Setter Property="Focusable"
+                                    Value="False" />
+                        </Style>
+                    </buttons:ImageButton.Style>
+                </buttons:ImageButton>
+
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel Orientation="Vertical"
+                                Margin="46 0 30 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="15"
+                                       Text="적립 가능"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center" />
+                            <Image Source="{StaticResource pointImage}"
+                                   Width="19"
+                                   Height="18" 
+                                   Margin="3 0 0 0"/>
+                        </StackPanel>
+                        <buttons:ImageButton Text="{Binding User.MissionPoint, Converter={StaticResource MissionPointToStringConverter}}"
+                                             TextPadding="0"
+                                             Foreground="{StaticResource textPoint}"
+                                             FontSize="40"
+                                             FontWeight="ExtraBold"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
+                                             Padding="0"
+                                             Command="{Binding GotoAccumulateCommand}" />
+                        <!--<TextBlock FontSize="40"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   FontWeight="ExtraBold"
+                                   >
+                            <Run Text="{Binding User.MissionPoint, Converter={StaticResource MissionPointToStringConverter}}"
+                                 Foreground="{StaticResource textPoint}" />
+                        </TextBlock>-->
+                    </StackPanel>
+                    
+                </Grid>
+                <Grid Grid.Column="1">
+
+                    <Button Margin="0 20 46 0"                            
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="Transparent"
+                            Focusable="False"
+                            BorderThickness="0"
+                            Command="{Binding GotoAccumulateCommand}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Viewbox Width="10"
+                                             Height="20"
+                                             Stretch="Uniform">
+                                        <Path 
+                                              Stroke="{StaticResource textPoint}"
+                                              StrokeThickness="1.6"
+                                              Data="M 0,0 L 10,10 L 0,20" />
+                                    </Viewbox>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>                    
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <buttons:ImageButton CornerRadius="14"
+                                     Width="240"
+                                     Height="30"
+                                     Text="{Binding User.Cash, Converter={StaticResource CashToStringConverter}}"
+                                     TextPadding="5 0 0 0"
+                                     Foreground="White"
+                                     ImageOrientation="Horizontal"
+                                     ImageWidth="23"
+                                     ImageHeight="23"
+                                     ImageSource="/PopupCash.Main;Component/Resources/Images/mainPoint.png"
+                                     FontSize="15"
+                                     HorizontalAlignment="Left"
+                                     VerticalContentAlignment="Top"
+                                     HorizontalContentAlignment="Left"
+                                     Margin="15 0 0 0"
+                                     Padding="5"
+                                     Command="{Binding GotoAccumulateHistoryCommand}">
+                    <buttons:ImageButton.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Offset="0"
+                                          Color="{StaticResource GotoAccumulateFirstGradiention}" />
+                            <GradientStop Offset="1"
+                                          Color="{StaticResource GotoAccumulateSecondGradiention}" />
+                        </LinearGradientBrush>
+                    </buttons:ImageButton.Background>
+                </buttons:ImageButton>
+
+
+                <buttons:ImageButton CornerRadius="0"
+                                     Background="Transparent"
+                                     ImageSource="{StaticResource npayLogo}"
+                                     ImageWidth="59"
+                                     ImageHeight="20"
+                                     ImageOrientation="Horizontal"
+                                     Text="교환하기"
+                                     TextPadding="4 0 0 0"
+                                     FontSize="13"
+                                     Foreground="{StaticResource textNaverExchange}"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Margin="32 0 32 0"
+                                     Command="{Binding GotoExchangeNeverPayCommand}">
+                </buttons:ImageButton>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

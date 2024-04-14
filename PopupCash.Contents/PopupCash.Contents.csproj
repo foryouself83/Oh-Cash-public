@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="123.0.60" />
+    <PackageReference Include="chromiumembeddedframework.runtime.win-x64" Version="123.0.6" />
+    <PackageReference Include="chromiumembeddedframework.runtime.win-x86" Version="123.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PopupCash.Account\PopupCash.Account.csproj" />
+    <ProjectReference Include="..\PopupCash.Common\PopupCash.Common.csproj" />
+    <ProjectReference Include="..\PopupCash.Controls\PopupCash.Controls.csproj" />
+    <ProjectReference Include="..\PopupCash.Core\PopupCash.Core.csproj" />
+    <ProjectReference Include="..\PopupCash.Database\PopupCash.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AccumulateBrowserDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

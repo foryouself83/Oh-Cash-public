@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
+                    xmlns:coreConverters="clr-namespace:PopupCash.Core.Presentation.Converters;assembly=PopupCash.Core"
+                    xmlns:converters="clr-namespace:PopupCash.Controls.Presentation.Converters;assembly=PopupCash.Controls">
+
+
+    <coreConverters:BooleanToInverseBooleanConverter x:Key="BooleanToInverseBooleanConverter" />
+    <converters:PasswordInputToBooleanConverter x:Key="PasswordInputToBooleanConverter" />
+
+    <Style x:Key="seperatorHorizontalBorder"
+           TargetType="{x:Type Border}">
+        <Setter Property="Width"
+                Value="320" />
+        <Setter Property="Height"
+                Value="1" />
+        <Setter Property="CornerRadius"
+                Value="0" />
+        <Setter Property="Background"
+                Value="{StaticResource seperatorGray}" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+    </Style>
+
+
+    <Style x:Key="seperatorVerticalBorder"
+           TargetType="{x:Type Border}">
+        <Setter Property="Width"
+                Value="1" />
+        <Setter Property="Height"
+                Value="10" />
+        <Setter Property="CornerRadius"
+                Value="0" />
+        <Setter Property="Background"
+                Value="{StaticResource seperatorDarkGray}" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+    </Style>
+
+    <Style TargetType="{x:Type buttons:ImageButton}"
+           BasedOn="{StaticResource {x:Type buttons:ImageButton}}">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="TextPadding"
+                Value="0" />
+    </Style>
+</ResourceDictionary>

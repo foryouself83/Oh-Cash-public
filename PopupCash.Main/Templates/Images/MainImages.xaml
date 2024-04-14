@@ -1,0 +1,141 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DrawingImage x:Key="popupCashLogo">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V26 H27.685 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="9.083171903512266E-08"
+                                        Y="0" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1"
+                              Transform="1,0,0,1,5.224,6.977">
+                    <DrawingGroup Transform="6.12303176911189E-17,1,-1,6.12303176911189E-17,22.461,-6.977">
+                        <GeometryDrawing Brush="#FFF2EBFF"
+                                         Geometry="F1 M27.685,26z M0,0z M13,0A13,13,0,0,1,13,26A1.042,1.042,0,1,1,13,23.915A10.915,10.915,0,0,0,23.915,13A10.915,10.915,0,0,0,13,2.085L12.868,2.085A10.915,10.915,0,0,0,2.085,13L2.085,13.055A1.042,1.042,0,0,1,0,13.066L0,13A13.015,13.015,0,0,1,13,0z" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,-1.384,-5.015">
+                        <GeometryDrawing>
+                            <GeometryDrawing.Brush>
+                                <DrawingBrush Viewbox="0,0,1,1"
+                                              Stretch="Fill"
+                                              Opacity="1">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing>
+                                            <GeometryDrawing.Brush>
+                                                <LinearGradientBrush StartPoint="0.334,0.286"
+                                                                     EndPoint="1.022,1.309"
+                                                                     MappingMode="RelativeToBoundingBox"
+                                                                     SpreadMethod="Pad">
+                                                    <GradientStop Color="#FF8757E8"
+                                                                  Offset="0" />
+                                                    <GradientStop Color="#FF41A2D4"
+                                                                  Offset="1" />
+                                                </LinearGradientBrush>
+                                            </GeometryDrawing.Brush>
+                                            <GeometryDrawing.Geometry>
+                                                <RectangleGeometry Rect="0,0,1,1" />
+                                            </GeometryDrawing.Geometry>
+                                        </GeometryDrawing>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </GeometryDrawing.Brush>
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="10.818"
+                                                   RadiusY="10.818"
+                                                   Rect="0,0,21.636,21.949" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,8.21,-0.871">
+                        <GeometryDrawing Brush="#FFFFFFFF"
+                                         Geometry="F1 M27.685,26z M0,0z M6.148,10.944A1.228,1.228,0,0,1,5.568,10.798L0.646,8.152A1.225,1.225,0,0,1,0,7.072L0,1.227A1.226,1.226,0,1,1,2.453,1.227L2.453,6.338 6.729,8.638A1.227,1.227,0,0,1,6.147,10.945z M6.127,8.844A0.824,0.824,0,1,0,6.727,10.228A0.179,0.179,0,0,0,6.465,9.985A0.469,0.469,0,0,1,6.122,10.134A0.466,0.466,0,1,1,6.451,9.334A0.179,0.179,0,1,0,6.7,9.082A0.825,0.825,0,0,0,6.121,8.844z" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,-183.02,-179.953">
+                        <GeometryDrawing Brush="#FFF2EBFF"
+                                         Geometry="F1 M27.685,26z M0,0z M178.715,188.841A0.92,0.92,0,0,1,177.964,187.392L179.687,184.944A0.92,0.92,0,0,1,181.061,184.795L183.141,186.701A0.92,0.92,0,0,1,181.898,188.057L180.59,186.857 179.469,188.449A0.919,0.919,0,0,1,178.715,188.841z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="accumulateIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V29.4 H29.4 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="0"
+                                        Y="7.3606829643249512" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1"
+                                  Transform="1,0,0,1,1.2,1.2">
+                        <GeometryDrawing Brush="#FF9870E8"
+                                         Geometry="F1 M29.4,29.4z M0,0z M12.5,0A12.5,12.5,0,1,1,0,12.5A12.5,12.5,0,0,1,12.5,0z">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FFB99FEF"
+                                     Thickness="1.4"
+                                     StartLineCap="Flat"
+                                     EndLineCap="Flat"
+                                     LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,1.2,1.2">
+                        <GeometryDrawing Brush="#FF9870E8"
+                                         Geometry="F1 M29.4,29.4z M0,0z M12.5,0A12.5,12.5,0,1,1,0,12.5A12.5,12.5,0,0,1,12.5,0z" />
+                    </DrawingGroup>
+                    <DrawingGroup Opacity="1"
+                                  Transform="1,0,0,1,1.2,1.2">
+                        <GeometryDrawing Brush="#FFFFFFFF"
+                                         Geometry="F1 M29.4,29.4z M0,0z M12.5,0A12.5,12.5,0,1,1,0,12.5A12.5,12.5,0,0,1,12.5,0z" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,1.2,1.2">
+                        <GeometryDrawing Geometry="F1 M29.4,29.4z M0,0z M12.5,0A12.5,12.5,0,1,1,0,12.5A12.5,12.5,0,0,1,12.5,0z">
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#FFB99FEF"
+                                     Thickness="1.4"
+                                     StartLineCap="Flat"
+                                     EndLineCap="Flat"
+                                     LineJoin="Miter" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+                <DrawingGroup Transform="1,0,0,1,9.281,15.446">
+                    <GeometryDrawing Brush="#FFFFFFFF"
+                                     Geometry="F1 M29.4,29.4z M0,0z M5.893,-0.835A1.9,1.9,0,0,0,7.393,-1.454A2.425,2.425,0,0,0,7.946,-3.131A2.456,2.456,0,0,0,7.393,-4.816A1.892,1.892,0,0,0,5.893,-5.444L2.887,-5.444 2.887,-0.835000000000001z M0.64,-7.36L5.976,-7.36A4.384,4.384,0,0,1,8.157,-6.823A3.826,3.826,0,0,1,9.657,-5.323A4.418,4.418,0,0,1,10.194,-3.123A4.418,4.418,0,0,1,9.657,-0.923A3.826,3.826,0,0,1,8.157,0.577A4.384,4.384,0,0,1,5.976,1.1L2.887,1.1 2.887,5.03 0.64,5.03z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="npayLogo">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V20 H58.298 V0 H0 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="6.7397996872387012E-07"
+                                        Y="1.8072840248350985E-05" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Transform="1,0,0,1,-102.122,-19.359">
+                        <GeometryDrawing Brush="#FF01C136"
+                                         Geometry="F1 M58.298,20z M0,0z M129.258,33.039L129.258,37.229 126.979,37.229 126.979,24.276 129.258,24.276 129.258,25.6A3.982,3.982,0,0,1,132.49,24.072A4.9,4.9,0,0,1,137.396,28.972C137.396,29.065,137.396,29.159,137.388,29.252A4.953,4.953,0,0,1,132.647,34.409L132.507,34.409A4.06,4.06,0,0,1,129.257,33.034 M135.124,29.215A2.989,2.989,0,0,0,132.202,26.16L132.13,26.16A3.075,3.075,0,0,0,132.13,32.305A3.008,3.008,0,0,0,135.125,29.285L135.125,29.216" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,-147.784,-19.372">
+                        <GeometryDrawing Brush="#FF01C136"
+                                         Geometry="F1 M58.298,20z M0,0z M183.763,29.267A4.917,4.917,0,0,1,188.412,24.096Q188.554,24.088,188.696,24.089A4.143,4.143,0,0,1,191.896,25.481L191.896,24.289 194.196,24.289 194.196,34.223 191.896,34.223 191.896,32.933A4.076,4.076,0,0,1,188.664,34.427A4.967,4.967,0,0,1,183.764,29.396L183.764,29.266 M192.014,29.232A2.994,2.994,0,0,0,186.027,29.091L186.027,29.232A3,3,0,0,0,192.014,29.432L192.014,29.232" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,-195.941,-20.217">
+                        <GeometryDrawing Brush="#FF01C136"
+                                         Geometry="F1 M58.298,20z M0,0z M248,33.925L243.632,25.138 246.081,25.138 249.061,31.37 251.819,25.318 254.236,25.318 248.5,38.087 246.167,38.087z" />
+                    </DrawingGroup>
+                    <DrawingGroup Transform="1,0,0,1,0,-0.001">
+                        <GeometryDrawing Brush="#FF01C136"
+                                         Geometry="F1 M58.298,20z M0,0z M9.982,0A10,10,0,1,0,20,10A10,10,0,0,0,9.981,0 M14.593,14.851L11.621,14.851 8.341,9.968 8.341,14.851 5.368,14.851 5.368,5.542 8.341,5.542 11.62,10.425 11.62,5.542 14.593,5.542z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

@@ -1,0 +1,91 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:btn="clr-namespace:PopupCash.Controls.Buttons">
+
+    <Style TargetType="{x:Type btn:AccumulateItemButton}">
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type btn:AccumulateItemButton}">
+                    <Grid>
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Padding="0"
+                                Margin="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
+                                    <Image Source="{TemplateBinding ItemImageSource}"
+                                           Stretch="Fill"
+                                           Margin="20 0 0 0"
+                                           Width="{TemplateBinding ItemImageWidth}"
+                                           Height="{TemplateBinding ItemImageHeight}" />
+                                </Grid>
+                                <Grid Grid.Column="1">
+                                    <StackPanel Orientation="Vertical"
+                                                VerticalAlignment="Center">
+                                        <TextBlock x:Name="PART_TitleText"
+                                                   Text="{TemplateBinding Title}"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   Padding="10 0 0 0"
+                                                   FontSize="{TemplateBinding FontSize}"
+                                                   Foreground="{TemplateBinding Foreground}" />
+
+                                        <TextBlock x:Name="PART_DescriptionText"
+                                                   Text="{TemplateBinding Description}"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   Padding="10 0 0 0"
+                                                   Foreground="{TemplateBinding Foreground}" />
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="PART_ValueText"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Padding="10 0 0 0"
+                                                       Foreground="{TemplateBinding Foreground}">
+                                                
+                                                    <Run Text="{TemplateBinding CurrentValue}" />
+                                                    <Run Text=" / " />
+                                                    <Run Text="{TemplateBinding MaxValue}"
+                                                         Foreground="Red" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Column="2">
+                                    <Image Source="{TemplateBinding AccumulateImageSource}"
+                                           Stretch="Fill"
+                                           Margin="0 0 20 0"
+                                           HorizontalAlignment="Right"
+                                           Width="{TemplateBinding AccumulateImageWidth}"
+                                           Height="{TemplateBinding AccumulateImageHeight}" />
+                                </Grid>
+                            </Grid>
+
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="Border"
+                                    Property="Background"
+                                    Value="Gray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

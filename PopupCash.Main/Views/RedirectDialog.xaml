@@ -1,0 +1,223 @@
+﻿<UserControl x:Class="PopupCash.Main.Views.RedirectDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:cefSharpWpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
+             xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
+             Width="528"
+             Height="800"
+             Padding="0">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/PopupCash.Core;component/Templates/Colors.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--buttons-->
+
+            <Style TargetType="{x:Type buttons:ImageButton}"
+                   BasedOn="{StaticResource {x:Type buttons:ImageButton}}"
+                   x:Key="HeaderImageButtonStyle">
+                <Setter Property="Background"
+                        Value="{StaticResource windowHeaderBackground}" />
+                <Setter Property="CornerRadius"
+                        Value="0" />
+                <Setter Property="ImageWidth"
+                        Value="16" />
+                <Setter Property="ImageHeight"
+                        Value="16" />
+                <Setter Property="Padding"
+                        Value="15 10 15 10" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Right" />
+                <Setter Property="VerticalAlignment"
+                        Value="Top" />
+                <Setter Property="TextPadding"
+                        Value="0" />
+                <Setter Property="AllowMouseOverColor"
+                        Value="True" />
+                <Setter Property="MouseOverColor"
+                        Value="{StaticResource buttonMouseOver}" />
+            </Style>
+
+            <!--Images-->
+
+            <DrawingImage x:Key="CloseDrawingImage">
+                <DrawingImage.Drawing>
+                    <GeometryDrawing Brush="{StaticResource windowHeaderButtonBackground}">
+                        <GeometryDrawing.Geometry>
+                            <!-- Path Data 정의 -->
+                            <PathGeometry Figures="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+
+            <!--Enliple Images-->
+
+            <DrawingImage x:Key="close_white">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+                        <DrawingGroup.Transform>
+                            <TranslateTransform X="0"
+                                                Y="104.80000305175781" />
+                        </DrawingGroup.Transform>
+                        <DrawingGroup Transform="6.12303176911189E-17,1,-1,6.12303176911189E-17,13,3">
+                            <GeometryDrawing Geometry="F1 M16,16z M0,0z M0,0L10,10">
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="White"
+                                         Thickness="1"
+                                         StartLineCap="Flat"
+                                         EndLineCap="Flat"
+                                         LineJoin="Miter" />
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                        <DrawingGroup Transform="1,0,0,1,-9661.626,107.799">
+                            <GeometryDrawing Geometry="F1 M16,16z M0,0z M9664.626,-104.8L9674.626,-94.8">
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="White"
+                                         Thickness="1"
+                                         StartLineCap="Flat"
+                                         EndLineCap="Flat"
+                                         LineJoin="Miter" />
+                                </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+
+            <DrawingImage x:Key="ico_maximize">
+                <DrawingImage.Drawing>
+                    <DrawingGroup ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+                        <DrawingGroup Opacity="1">
+                            <DrawingGroup Opacity="1">
+                                <DrawingGroup Transform="1,0,0,1,2,5" />
+                                <DrawingGroup Transform="1,0,0,1,2,5">
+                                    <GeometryDrawing Geometry="F1 M16,16z M0,0z M0.5,0.5L8.5,0.5 8.5,8.5 0.5,8.5z">
+                                        <GeometryDrawing.Pen>
+                                            <Pen Brush="{StaticResource windowHeaderButtonBackground}"
+                                                 Thickness="1"
+                                                 StartLineCap="Flat"
+                                                 EndLineCap="Flat"
+                                                 LineJoin="Miter" />
+                                        </GeometryDrawing.Pen>
+                                    </GeometryDrawing>
+                                </DrawingGroup>
+                            </DrawingGroup>
+                            <DrawingGroup Transform="1,0,0,1,-1818,-53">
+                                <GeometryDrawing Geometry="F1 M16,16z M0,0z M1823.484,58.094L1823.484,55.5 1831.5,55.5 1831.5,63.5 1828.313,63.5">
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="{StaticResource windowHeaderButtonBackground}"
+                                             Thickness="1"
+                                             StartLineCap="Flat"
+                                             EndLineCap="Flat"
+                                             LineJoin="Miter" />
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <prism:Dialog.WindowStyle>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="prism:Dialog.WindowStartupLocation"
+                    Value="Manual" />
+            <Setter Property="ResizeMode"
+                    Value="NoResize" />
+            <Setter Property="ShowInTaskbar"
+                    Value="True" />
+            <!--<Setter Property="SizeToContent"
+                   Value="Manual" />-->
+            <Setter Property="WindowStyle"
+                    Value="None" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="MinWidth"
+                    Value="{Binding WindowWidth, Mode=OneTime}" />
+            <Setter Property="MinHeight"
+                    Value="{Binding WindowHeight, Mode=OneTime}" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="AllowsTransparency"
+                    Value="true" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="0" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </prism:Dialog.WindowStyle>
+
+    <behaviors:Interaction.Behaviors>
+        <!--윈도우를 이동시키는 Behavior-->
+        <coreBehaviors:DragWindowBehavior />
+    </behaviors:Interaction.Behaviors>
+
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
+        </behaviors:EventTrigger>
+        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+
+    <Border Style="{StaticResource windowBaseBorder}"
+            CornerRadius="0">
+        <Grid Background="{StaticResource windowHeaderBackground}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <behaviors:Interaction.Behaviors>
+                    <!--윈도우를 이동시키는 Behavior-->
+                    <coreBehaviors:DragWindowBehavior />
+                </behaviors:Interaction.Behaviors>
+
+                <buttons:ImageButton Style="{StaticResource closeImageButton}"
+                                     Command="{Binding CancelCommand}" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <cefSharpWpf:ChromiumWebBrowser x:Name="browser"
+                                                Address="{Binding Address}"
+                                                Padding="0">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="Initialized"
+                                                SourceObject="{Binding ElementName=browser}">
+                            <prism:InvokeCommandAction Command="{Binding BrowserInitializedCommand}"
+                                                       CommandParameter="{Binding ElementName=browser}" />
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </cefSharpWpf:ChromiumWebBrowser>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
