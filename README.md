@@ -18,10 +18,12 @@ Oh-Tech는 다양한 온라인 서비스에서 포인트 적립을 자동화하�
 - **Prism**: MVVM 패턴 및 모듈화 구조 구현
 - **CommunityToolkit**: 개발 생산성 향상을 위한 유틸리티
 - **CefSharp**: 웹뷰 자동화 기능 구현
+- **Custom Control**: Image, Place Holder 기능을 포함한 Button 제작
 - **REST API**: 서버와의 데이터 통신
 
 ## 📚 사용 도구
 
+- **SQLite**: 클라이언트 데이터 베이스
 - **NSIS**: 설치 파일 생성
 
 ## ✨ 주요 기능
@@ -66,3 +68,13 @@ Oh-Tech는 다양한 온라인 서비스에서 포인트 적립을 자동화하�
 ## 🔄 업데이트
 
 프로그램이 자동으로 업데이트를 확인하고 새 버전이 있을 때 알림을 표시합니다. 원클릭으로 최신 버전으로 업데이트할 수 있습니다.
+
+## UI
+1. MAIN   
+   <img width="20%" height="20%" src="https://github.com/foryouself83/Oh-Cash-public/blob/master/Main.png?raw=true"/>   
+2. Mission List   
+   <img width="20%" height="20%" src="https://github.com/foryouself83/Oh-Cash-public/blob/master/MissionList.png?raw=true"/>   
+3. PointHistory   
+   <img width="20%" height="20%" src="https://github.com/foryouself83/Oh-Cash-public/blob/master/PointHistory.png?raw=true"/>
+3. TrayIcon   
+   <img width="20%" height="20%" src="https://github.com/foryouself83/Oh-Cash-public/blob/master/TrayIcons.png?raw=true"/>   

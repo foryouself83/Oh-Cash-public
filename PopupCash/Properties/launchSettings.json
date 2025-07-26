@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PopupCash": {
-      "commandName": "Project",
-      "nativeDebugging": false
-    }
-  }
-}
