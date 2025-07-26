@@ -13,6 +13,7 @@ namespace PopupCash.Account.Models.Cashs.Impl
         public string? Mac { get; set; }
         [JsonProperty("media_user_key")]
         public string? UserKey { get; set; }
+<<<<<<< HEAD
 
         public MissionParticipationRequest()
         {
@@ -25,5 +26,7 @@ namespace PopupCash.Account.Models.Cashs.Impl
             MissionId = missionId;
             UserKey = userKey;
         }
+=======
+>>>>>>> ba01ad0 (Feat: 미션 완료 적립 API 추가 진행 #1)
     }
 }
