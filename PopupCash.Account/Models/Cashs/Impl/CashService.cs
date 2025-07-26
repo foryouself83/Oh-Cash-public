@@ -1,7 +1,5 @@
 ﻿using System.Net.Http;
-
 using PopupCash.Account.Extensions;
-using PopupCash.Account.Models.Helpers;
 using PopupCash.Account.Models.Users.Impl;
 
 namespace PopupCash.Account.Models.Cashs.Impl
@@ -32,6 +30,7 @@ namespace PopupCash.Account.Models.Cashs.Impl
 
             return await client.GetAsync<PomissionAccessTokenResponse>(apiUrl).ConfigureAwait(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         }
 
@@ -41,6 +40,12 @@ namespace PopupCash.Account.Models.Cashs.Impl
 
         public async Task<CashSaveHistoryResponse> GetCashSaveHistory(string accessToken)
 >>>>>>> ba01ad0 (Feat: 미션 완료 적립 API 추가 진행 #1)
+=======
+
+        }
+
+        public async Task<CashSaveHistoryResponse> GetCashSaveHistory(string accesstoken)
+>>>>>>> 8b539a1 (Feat: 미션 완료 적립 API 추가)
         {
             var client = _httpClientFactory.CreateClient();
             client.AddDefaultHeaders();
@@ -48,7 +53,7 @@ namespace PopupCash.Account.Models.Cashs.Impl
             // API 엔드포인트 URL 지정
             string apiUrl = $"{_baseUrl}{_apiVersion}/cash/save";
 
-            client.DefaultRequestHeaders.Add("x-access-token", accessToken);
+            client.DefaultRequestHeaders.Add("x-access-token", accesstoken);
 
             return await client.GetAsync<CashSaveHistoryResponse>(apiUrl).ConfigureAwait(false);
         }
@@ -74,34 +79,31 @@ namespace PopupCash.Account.Models.Cashs.Impl
 =======
 >>>>>>> ba01ad0 (Feat: 미션 완료 적립 API 추가 진행 #1)
 
-        public async Task<PomissionAccessTokenResponse> MissionParticipationPomissionAsync(string accessToken, MissionParticipationRequest requestInfo)
+        public async Task<MissionParticipationResponse> MissionParticipationPomissionAsync(string accessToken, MissionParticipationRequest requestInfo)
         {
             var client = _httpClientFactory.CreateClient();
             client.AddDefaultHeaders();
 
+            client.DefaultRequestHeaders.Add("x-access-token", accessToken);
+
             // API 엔드포인트 URL 지정
             string apiUrl = $"{_basePomissionUrl}{_apiVersion}/mission/auto/participation";
 
-            client.DefaultRequestHeaders.Add("x-access-token", accessToken);
-
-            string mac = MacAddressHelper.GetMacAddress();
-            requestInfo.Mac = $"{mac}";
-
-            return await client.PostAsync<PomissionAccessTokenResponse>(apiUrl, requestInfo).ConfigureAwait(false);
+            return await client.PostAsync<MissionParticipationResponse>(apiUrl, requestInfo).ConfigureAwait(false);
         }
 
-        //public async Task<SaveCashResponse> SaveCashAsync(string accessToken, SaveCashRequest requestInfo)
-        //{
+        public async Task<SaveCashResponse> SaveCashAsync(string accessToken, SaveCashRequest requestInfo)
+        {
 
-        //    var client = _httpClientFactory.CreateClient();
-        //    client.AddDefaultHeaders();
-        //    client.DefaultRequestHeaders.Add("x-access-token", accessToken);
+            var client = _httpClientFactory.CreateClient();
+            client.AddDefaultHeaders();
+            client.DefaultRequestHeaders.Add("x-access-token", accessToken);
 
-        //    // API 엔드포인트 URL 지정
-        //    string apiUrl = $"{_baseUrl}v4/cash";
-        //    requestInfo.Type = "2";
+            // API 엔드포인트 URL 지정
+            string apiUrl = $"{_baseUrl}v4/cash";
+            requestInfo.Type = "2";
 
-        //    return await client.PostAsync<SaveCashResponse>(apiUrl, requestInfo).ConfigureAwait(false);
-        //}
+            return await client.PostAsync<SaveCashResponse>(apiUrl, requestInfo).ConfigureAwait(false);
+        }
     }
 }

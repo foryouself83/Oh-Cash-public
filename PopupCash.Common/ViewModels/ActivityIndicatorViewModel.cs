@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using Microsoft.Extensions.Logging;
+
 using PopupCash.Common.Models.Dialogs.Parameters;
 using PopupCash.Common.Models.Events;
+
 using Prism.Events;
 using Prism.Services.Dialogs;
 
@@ -21,6 +24,7 @@ namespace PopupCash.Common.ViewModels
         {
             _eventAggregator = eventAggregator;
 
+            Title = "ActivityIndicator";
 
             _eventAggregator.GetEvent<ActivityIndicatorEvent>().Subscribe(OnReceiveActivityIndicatorEvent, ThreadOption.UIThread);
         }

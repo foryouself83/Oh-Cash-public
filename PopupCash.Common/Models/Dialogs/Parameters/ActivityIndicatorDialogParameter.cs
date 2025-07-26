@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+
 using CommunityToolkit.Mvvm.ComponentModel;
+
 using Prism.Services.Dialogs;
 
 namespace PopupCash.Common.Models.Dialogs.Parameters
@@ -8,6 +10,9 @@ namespace PopupCash.Common.Models.Dialogs.Parameters
     [ObservableObject]
     public partial class ActivityIndicatorDialogParameter : DialogParameters
     {
+        [ObservableProperty]
+        private string _owendWindowTitle;
+
         [ObservableProperty]
         private string _text;
 
@@ -32,10 +37,11 @@ namespace PopupCash.Common.Models.Dialogs.Parameters
 
 
         // 매개변수로 받는 속성들을 초기화하는 생성자
-        public ActivityIndicatorDialogParameter(string text, Brush textColor, FontWeight textFontWeight,
+        public ActivityIndicatorDialogParameter(string owendWindowTitle, string text, Brush textColor, FontWeight textFontWeight,
                                           string subText, Brush subTextColor, FontWeight subTextFontWeight,
                                           bool useSubText)
         {
+            OwendWindowTitle = owendWindowTitle;
             Text = text;
             TextColor = textColor;
             TextFontWeight = textFontWeight;

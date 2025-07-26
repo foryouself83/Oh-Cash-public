@@ -13,18 +13,18 @@
         Background="Transparent"
         BorderBrush="Transparent"
         BorderThickness="0"
-        SizeToContent="WidthAndHeight"        
+        SizeToContent="Manual"        
         Padding="0"
         ResizeMode="NoResize"
         WindowStyle="None"
         Title="{Binding Title}"
-        Width="{Binding WindowWidth, Mode=OneTime}"
-        Height="{Binding WindowHeight, Mode=OneTime}"
+        Width="374"
+        Height="176"
         Left="{Binding WindowLeft, Mode=TwoWay}"
         Top="{Binding WindowTop, Mode=TwoWay}"
         x:Name="mainWindow"
-        MinWidth="400"
-        MinHeight="180">
+        MinWidth="374"
+        MinHeight="176">
     
     <Window.Triggers>
         <EventTrigger RoutedEvent="tb:TaskbarIcon.TrayToolTipOpen"
@@ -50,7 +50,7 @@
 
     <Border Style="{StaticResource windowBaseBorder}">
         <Grid>
-            <ContentControl prism:RegionManager.RegionName="MainModuleContent"
+            <ContentControl prism:RegionManager.RegionName="MainModuleContent" Focusable="False"
                             Padding="0" />
             <tb:TaskbarIcon x:Name="trayIcon"
                             Visibility="Visible"

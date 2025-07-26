@@ -133,7 +133,7 @@
     <prism:Dialog.WindowStyle>
         <Style TargetType="{x:Type Window}">
             <Setter Property="prism:Dialog.WindowStartupLocation"
-                    Value="CenterOwner" />
+                    Value="CenterScreen" />
             <Setter Property="ResizeMode"
                     Value="NoResize" />
             <Setter Property="ShowInTaskbar"
@@ -178,14 +178,6 @@
         <coreBehaviors:DragWindowBehavior />
     </behaviors:Interaction.Behaviors>
 
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
 
 
     <Border Style="{StaticResource windowBaseBorder}"

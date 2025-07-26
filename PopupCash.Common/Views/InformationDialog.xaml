@@ -4,6 +4,7 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviours="clr-namespace:PopupCash.Common.Presentation.Behaviours"
              xmlns:coreConverters="clr-namespace:PopupCash.Core.Presentation.Converters;assembly=PopupCash.Core"
              xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
              xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
@@ -87,6 +88,8 @@
     <behaviors:Interaction.Behaviors>
         <!--윈도우를 이동시키는 Behavior-->
         <coreBehaviors:DragWindowBehavior />
+        <!--윈도우 위치 지정 Behavior-->
+        <behaviours:DefaultCenterWindowPostionBehavior OwnedWindowTitle="{Binding Parameter.OwendWindowTitle}" />
     </behaviors:Interaction.Behaviors>
 
 

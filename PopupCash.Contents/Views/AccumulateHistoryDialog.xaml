@@ -3,10 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:cefSharpWpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
-             xmlns:behaviours="clr-namespace:PopupCash.Contents.Presentation.Behaviours"
              xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
              xmlns:converters="clr-namespace:PopupCash.Contents.Presentation.Converters"             
              Padding="0">
@@ -57,7 +55,8 @@
                 <Setter Property="ItemsPanel">
                     <Setter.Value>
                         <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Margin="0"/>
+                            <VirtualizingStackPanel Margin="0"
+                                                    IsHitTestVisible="False" />
                         </ItemsPanelTemplate>
                     </Setter.Value>
                 </Setter>
@@ -118,7 +117,7 @@
 
                                 <Border Background="{StaticResource seperatorGray}"
                                         HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Bottom"
+                                        VerticalAlignment="Bottom"                                        
                                         Height="1" />
                             </Grid>                            
                         </DataTemplate>
@@ -132,7 +131,7 @@
     <prism:Dialog.WindowStyle>
         <Style TargetType="{x:Type Window}">
             <Setter Property="prism:Dialog.WindowStartupLocation"
-                    Value="Manual" />
+                    Value="CenterScreen" />
             <Setter Property="ResizeMode"
                     Value="NoResize" />
             <Setter Property="ShowInTaskbar"
@@ -153,14 +152,10 @@
                     Value="Transparent" />
             <Setter Property="BorderThickness"
                     Value="0" />
-            <Setter Property="MinWidth"
-                    Value="{Binding WindowWidth, Mode=OneTime}" />
-            <Setter Property="MinHeight"
-                    Value="{Binding WindowHeight, Mode=OneTime}" />
             <Setter Property="Width"
-                    Value="{Binding WindowWidth, Mode=OneTime}" />
+                    Value="452" />
             <Setter Property="Height"
-                    Value="{Binding WindowHeight, Mode=OneTime}" />
+                    Value="600" />
             <Setter Property="Padding"
                     Value="0" />
             <Setter Property="Margin"
@@ -186,9 +181,6 @@
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
@@ -246,8 +238,9 @@
                        VerticalAlignment="Top"
                        Foreground="{StaticResource textDarkGrayColor}" />
 
-            <ListView ItemsSource="{Binding CashHistory.Cash}"                      
-                      Style="{StaticResource cashSaveHistoryListViewStyle}">                
+            <ListView ItemsSource="{Binding CashHistory.Cash}"              
+                      KeyboardNavigation.TabNavigation="None"
+                      Style="{StaticResource cashSaveHistoryListViewStyle}">
             </ListView>
         </Grid>
     </Border>

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -11,12 +12,17 @@ namespace PopupCash.Common.ViewModels
     {
         public override event Action<IDialogResult>? RequestClose;
 
+        private DispatcherTimer _timer;
+
         [ObservableProperty]
         private InformationDialogParameter? _parameter;
 
         public InformationDialogViewModel(ILogger<InformationDialogViewModel> loggor) : base(loggor)
         {
             Title = "알림";
+            _timer = new DispatcherTimer();
+            _timer.Tick += ChangeOkButtonTextTick;
+            _timer.Interval += TimeSpan.FromSeconds(1);
         }
 
 
@@ -41,6 +47,31 @@ namespace PopupCash.Common.ViewModels
             if (parameters is InformationDialogParameter parameter)
             {
                 this.Parameter = parameter;
+
+                if (Parameter.AutoExit > 0)
+                {
+                    _timer.Start();
+                }
+            }
+        }
+
+        private void ChangeOkButtonTextTick(object? sender, EventArgs e)
+        {
+            _timer.Stop();
+            if (Parameter is not null)
+            {
+                Parameter.ConfirmButtonText = $"{--Parameter.AutoExit}초 후 자동으로 종료됩니다.";
+
+                if (Parameter.AutoExit > 0)
+                {
+                    _timer.Start();
+                }
+                else
+                {
+                    RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters()
+                    {
+                    }));
+                }
             }
         }
 

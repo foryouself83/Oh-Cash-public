@@ -12,6 +12,8 @@ namespace PopupCash.Models.Commands.Impl
             if (GetTaskbarWindow(parameter) is not Window window) return;
             if (window.DataContext is not MainWindowViewModel viewModel) return;
 
+            base.Execute(parameter);
+
             viewModel.ShowOpenSourceDialog();
 
             //window.Hide();

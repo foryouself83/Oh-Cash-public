@@ -2,6 +2,8 @@
 using System.Net.Http.Headers;
 using PopupCash.Account.Extensions;
 using PopupCash.Account.Models.Helpers;
+using PopupCash.Account.Models.Socials.Kakaos;
+using PopupCash.Core.Models.Constants;
 
 namespace PopupCash.Account.Models.Users.Kakao.Impl
 {
@@ -18,21 +20,20 @@ namespace PopupCash.Account.Models.Users.Kakao.Impl
 
         public async Task<string> GetSocialUserEmail(string accessToken)
         {
-            if (await GetUserInfoAsync(accessToken) is not KakaoUser user) throw new Exception("KAKAO 에서 User 정보를 가져오는데 실패하였습니다.");
-            if (user.KakaoAccount is not KakaoAccount account) throw new Exception("KAKAO 에서 Account 정보를 가져오는데 실패하였습니다.");
-            if (string.IsNullOrEmpty(account.Email)) throw new Exception("KAKAO 에서 E-MAIL 정보를 가져오는데 실패하였습니다.");
+            if (await GetUserInfoAsync(accessToken) is not KakaoUserResponse user) throw new Exception($"{ConstantString.KakaoName}에서 User 정보를 가져오는데 실패하였습니다.");
+            if (user.KakaoAccount is not KakaoAccount account) throw new Exception($"{ConstantString.KakaoName}에서 Account 정보를 가져오는데 실패하였습니다.");
+            if (string.IsNullOrEmpty(account.Email)) throw new Exception("이메일 제공 동의가 필요합니다.");
 
-            return account.Email;
+            return account.Email ??= string.Empty;
         }
 
-        public async Task<KakaoUser> GetUserInfoAsync(string accessToken)
+        public async Task<KakaoUserResponse> GetUserInfoAsync(string accessToken)
         {
             var url = UriHelper.CombineUri(_apiUrlBase, $"/v2/user/me");
             var client = _httpClientFactory.CreateClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"{accessToken}");
-            client.DefaultRequestHeaders.Add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-            return await client.GetAsync<KakaoUser>(_apiUrlBase).ConfigureAwait(false);
+            return await client.GetAsync<KakaoUserResponse>(url).ConfigureAwait(false);
         }
 
         /// <summary>

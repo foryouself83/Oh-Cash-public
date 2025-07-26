@@ -19,6 +19,7 @@ namespace PopupCash.Main.Models.Users
         [ObservableProperty]
         public string? _flag;
 
+        public string? AccessToken { get; set; }
         /// <summary>
         /// 미션 리스트 URI 사용
         /// </summary>
@@ -26,6 +27,6 @@ namespace PopupCash.Main.Models.Users
         /// <summary>
         /// 미션 리스트 URI 사용
         /// </summary>
-        public string? Key { get; set; }
+        public string? PomissionKey { get; set; }
     }
 }

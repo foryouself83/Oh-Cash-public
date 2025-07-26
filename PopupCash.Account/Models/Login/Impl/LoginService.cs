@@ -1,5 +1,8 @@
 ﻿using System.Net.Http;
 using System.Windows;
+
+using AutoMapper;
+
 using PopupCash.Account.Extensions;
 using PopupCash.Account.Models.Authenthications;
 using PopupCash.Account.Models.Authenthications.Impl;
@@ -11,13 +14,20 @@ namespace PopupCash.Account.Models.Login.Impl
     {
         private const string _apiVersion = "v1";
         private const string _baseUrl = "https://api.popupcash.co.kr/api/";
+
+        private readonly IMapper _mapper;
+
         /// <summary>
         /// httpClientFactory
         /// </summary>
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IAuthService _authService;
-        public LoginService(IHttpClientFactory httpClientFactory, IAuthService authService)
+
+        public PomissionInfo? PomissionInfo { get; private set; }
+
+        public LoginService(IMapper mapper, IHttpClientFactory httpClientFactory, IAuthService authService)
         {
+            _mapper = mapper;
             _httpClientFactory = httpClientFactory;
             _authService = authService;
 
@@ -47,8 +57,6 @@ namespace PopupCash.Account.Models.Login.Impl
             string mac = MacAddressHelper.GetMacAddress();
             requestInfo.AdId = $"{mac}";
             requestInfo.Mac = $"{mac}";
-            //requestInfo.adid = "32d30c1d-45b6-469a-ac6d";
-            requestInfo.Type = "0";
             requestInfo.DeviceId = $"{mac}";
             requestInfo.DeviceModel = "PC";
             requestInfo.DeviceOs = Environment.OSVersion.VersionString;
@@ -68,8 +76,6 @@ namespace PopupCash.Account.Models.Login.Impl
             string mac = MacAddressHelper.GetMacAddress();
             requestInfo.Mac = $"{mac}";
             requestInfo.AdId = $"{mac}";
-            //requestInfo.adid = "32d30c1d-45b6-469a-ac6d";
-            //requestInfo.Type = "0";
 
             return await client.PostAsync<LoginResponse>(apiUrl, requestInfo).ConfigureAwait(false);
         }
@@ -108,6 +114,10 @@ namespace PopupCash.Account.Models.Login.Impl
         }
 
         #region Auth Services
+        public void SetSocialService(string name)
+        {
+            _authService.SetSocialService(name);
+        }
         public string GetAuthCodeUrl()
         {
             return _authService.GetAuthCodeUrl();
@@ -126,6 +136,24 @@ namespace PopupCash.Account.Models.Login.Impl
 
             return await _authService.GetAuthorizationTokenAsync(authResponse.Code);
         }
+
+        public async Task<bool> UnlinkAsync(string accessToken)
+        {
+            return await _authService.UnlinkAsync(accessToken);
+        }
+
+        public void SetInitData(InitializeResponse response)
+        {
+            if (response.PomissionInfo is null) throw new Exception($"Pomission 에 대한 키 값이 없습니다. ");
+            this.PomissionInfo = response.PomissionInfo;
+            _authService.SetInitData(response);
+        }
+
+        public PomissionInfo? GetPomissionInfo()
+        {
+            return PomissionInfo;
+        }
+
         #endregion
     }
 }

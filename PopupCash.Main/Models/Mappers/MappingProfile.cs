@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using PopupCash.Account.Models.Authenthications.Impl;
-using PopupCash.Account.Models.Authenthications.Kakao.Impl;
 using PopupCash.Account.Models.Login.Impl;
+using PopupCash.Account.Models.Socials.Google;
+using PopupCash.Account.Models.Socials.Kakaos;
+using PopupCash.Account.Models.Socials.Navers;
 using PopupCash.Account.Models.Users.Impl;
 using PopupCash.Contents.Models.Cashs;
 using PopupCash.Database.Models.Users;
@@ -19,7 +21,23 @@ namespace PopupCash.Main.Models.Mappers
     {
         public MappingProfile()
         {
+            //CreateMap<InitializeResponse, PomissionInfo>()
+            //    .ForMember(dest => dest.MediaId, opt => opt.MapFrom(src => src));
+
+            //CreateMap<InitializeResponse, KakaoRestKey>()
+            //    .ForMember(dest => dest, opt => opt.MapFrom(src => src.KakaoRestKey));
+            //CreateMap<InitializeResponse, NaverRestKey>()
+            //    .ForMember(dest => dest, opt => opt.MapFrom(src => src.NaverRestKey));
+            //CreateMap<InitializeResponse, GoogleRestKey>()
+            //    .ForMember(dest => dest, opt => opt.MapFrom(src => src.GoogleRestKey));
+
+
             CreateMap<KakaoTokenResponse, AuthTokenInfo>();
+
+            CreateMap<NaverTokenResponse, AuthTokenInfo>();
+            CreateMap<NaverRefreshTokenResponse, AuthTokenInfo>();
+
+            CreateMap<GoogleTokenResponse, AuthTokenInfo>();
 
             CreateMap<LoginResponse, Authorization>()
                 .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.Token));
@@ -27,20 +45,22 @@ namespace PopupCash.Main.Models.Mappers
             CreateMap<JoinResponse, Authorization>()
                 .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.Token));
 
-            CreateMap<UserResponse, User>()
-            .ForMember(dest => dest.ProfileImageUrl, opt => opt.MapFrom(src => src.Profile))
-            .ForMember(dest => dest.MissionPoint, opt => opt.MapFrom(src => src.Mission_point));
 
             CreateMap<UserResponse, CurrentUser>()
-            .ForMember(dest => dest.MissionPoint, opt => opt.MapFrom(src => src.Mission_point));
+                .ForMember(dest => dest.MissionPoint, opt => opt.MapFrom(src => src.Mission_point))
+                .ForMember(dest => dest.PomissionKey, opt => opt.MapFrom(src => src.Key))
+                .ForMember(dest => dest.Mac, opt => opt.MapFrom(src => src.Mac));
 
-            CreateMap<User, CurrentUser>();
+            CreateMap<CurrentUser, UserData>()
+                .ForMember(dest => dest.AccessToken, opt => opt.MapFrom(src => src.AccessToken))
+                .ForMember(dest => dest.MacAddress, opt => opt.MapFrom(src => src.Mac));
 
             CreateMap<CashSaveHistoryResponse, CashHistory>()
-            .ForMember(dest => dest.Cash, opt => opt.MapFrom(src => src.Save == null ? new List<CashData>() : src.Save.Cash));
+                .ForMember(dest => dest.Cash, opt => opt.MapFrom(src => src.Save == null ? new List<CashData>() : src.Save.Cash));
 
 
             CreateMap<JoinInfo, JoinRequest>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.LoginType))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password.ToUnsecuredString()));
 
             CreateMap<ResponseIdentityVerification, IdentityVerificationResponse>();

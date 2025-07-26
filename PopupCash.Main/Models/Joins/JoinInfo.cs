@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Security;
 using CommunityToolkit.Mvvm.ComponentModel;
+using PopupCash.Core.Models.Constants;
 using PopupCash.Main.Extensions;
 
 namespace PopupCash.Main.Models.Joins
@@ -77,6 +78,13 @@ namespace PopupCash.Main.Models.Joins
 
 
         /// <summary>
+        /// 가입 유형(0: 힐링캐시, 1:구글, 2: 페이스북, 3: 카카오, 4: 네이버)
+        /// </summary>        
+        [ObservableProperty]
+        private string _loginType;
+
+
+        /// <summary>
         /// Join 조건 완료 여부
         /// </summary>
         [ObservableProperty]
@@ -108,6 +116,9 @@ namespace PopupCash.Main.Models.Joins
             Name = string.Empty;
             Phone = string.Empty;
             Recommender = string.Empty;
+
+            LoginType = ConstantString.AppType;
+
             IsCheckedPolicy = false;
             IsCheckedPrivacy = false;
             IsCheckedAge = false;
@@ -167,7 +178,14 @@ namespace PopupCash.Main.Models.Joins
                 e.PropertyName == nameof(IsAbleChecked) ||
                 e.PropertyName == nameof(IsIdentityVerification))
             {
-                IsAbleJoin = IsAbleEmail && IsAblePassword && IsAbleChecked && IsIdentityVerification;
+                if (LoginType is not null && LoginType.Equals(ConstantString.AppType))
+                {
+                    IsAbleJoin = IsAbleEmail && IsAblePassword && IsAbleChecked && IsIdentityVerification;
+                }
+                else
+                {
+                    IsAbleJoin = IsAbleEmail && IsAbleChecked && IsIdentityVerification;
+                }
             }
         }
     }

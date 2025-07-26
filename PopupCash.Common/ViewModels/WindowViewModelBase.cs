@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using PopupCash.Common.Models.Commands.Impl;
 using PopupCash.Database.Models.Locations;
@@ -51,9 +52,9 @@ namespace PopupCash.Common.ViewModels
             _title = string.Empty;
         }
 
-        protected WindowPosition? GetWindowPosition()
+        protected WindowPosition? GetWindowPosition(Window window)
         {
-            var command = new ReadMainWindowPositionCommand(windowId, WindowWidth, WindowHeight);
+            var command = new ReadMainWindowPositionCommand(windowId, WindowWidth, WindowHeight <= 0 ? window.Height : WindowHeight);
             if (command.Execute(windowId) is not WindowPosition windowPosition) return null;
 
 

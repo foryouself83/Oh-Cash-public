@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 
 using Microsoft.Extensions.Logging;
 using PopupCash.Account.Models.Cashs;
+using PopupCash.Account.Models.Login;
 using PopupCash.Common.Models.Events;
 using PopupCash.Common.ViewModels;
 using PopupCash.Contents.Models.Handlers.CefSharps;
@@ -33,14 +34,19 @@ namespace PopupCash.Contents.ViewModels
         #endregion
 
         #region Services
+        private readonly ILoginService _loginService;
         private readonly ICashService _cashService;
         private readonly IAuthorizationDataService _authorizationService;
+        private readonly IUserDataService _userDataService;
+
+        private readonly ILoggerFactory _loggerFactory;
         #endregion
+
+        private IWpfWebBrowser? _webbrowser;
 
         private bool _isChangedAddress;
 
         private string _trackerScript;
-        private string _missonScript;
 
         public override event Action<IDialogResult>? RequestClose;
 
@@ -51,30 +57,31 @@ namespace PopupCash.Contents.ViewModels
         private WindowState _windowState;
 
         public ContentBrowserDialogViewModel(IEventAggregator eventAggregator, IDialogService dialogService,
-            ICashService cashService,
-            IAuthorizationDataService authorizationService,
-            ILogger<ContentBrowserDialogViewModel> loggor) : base(loggor)
+            ILoginService loginService, ICashService cashService,
+            IAuthorizationDataService authorizationService, IUserDataService userDataService,
+            ILogger<ContentBrowserDialogViewModel> loggor, ILoggerFactory loggerFactory) : base(loggor)
         {
             _eventAggregator = eventAggregator;
             _dialogService = dialogService;
 
+            _loginService = loginService;
             _cashService = cashService;
+
             _authorizationService = authorizationService;
+            _userDataService = userDataService;
+
+            _loggerFactory = loggerFactory;
 
             _isChangedAddress = false;
 
             Address = string.Empty;
             _trackerScript = string.Empty;
-            _missonScript = string.Empty;
-
-            WindowWidth = 1440;
-            WindowHeight = 1024;
 
             Title = "ContentBrowser";
 
-
             _eventAggregator.GetEvent<CloseDialogEvent>().Subscribe(OnReceiveCloseDialog, ThreadOption.UIThread);
         }
+
 
         private void OnReceiveCloseDialog(string name)
         {
@@ -123,6 +130,8 @@ namespace PopupCash.Contents.ViewModels
         {
             if (sender is not ChromiumWebBrowser webBrowser) { return; }
 
+            _webbrowser = webBrowser;
+
             webBrowser.MenuHandler = new NoneMenuHandler();
             webBrowser.IsBrowserInitializedChanged += Webbrowser_IsBrowserInitializedChanged;
             webBrowser.LoadingStateChanged += OnLoadingStateChanged;
@@ -130,10 +139,19 @@ namespace PopupCash.Contents.ViewModels
             webBrowser.ConsoleMessage += ConsoleMessage;
             webBrowser.FrameLoadStart += Webbrowser_FrameLoadStart;
 
+            // IME 한글 입력 지원
             webBrowser.WpfKeyboardHandler = new CefSharp.Wpf.Experimental.WpfImeKeyboardHandler(webBrowser);
 
+            // use java script object
             webBrowser.JavascriptObjectRepository.Settings.LegacyBindingEnabled = true;
-            webBrowser.JavascriptObjectRepository.Register("HybridApp", new HybridAppScript(_eventAggregator, _dialogService, _cashService, _authorizationService), options: BindingOptions.DefaultBinder);
+            webBrowser.JavascriptObjectRepository.Register("HybridApp", new HybridAppScript(_eventAggregator, _dialogService,
+                _loginService, _cashService,
+                _authorizationService, _userDataService,
+                _loggerFactory.CreateLogger<HybridAppScript>()),
+                options: BindingOptions.DefaultBinder);
+
+            // 새 탭 방지
+            webBrowser.LifeSpanHandler = new SingleLifeSpanHandler();
         }
 
         private void Webbrowser_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -160,19 +178,12 @@ namespace PopupCash.Contents.ViewModels
                     await Task.Delay(1);
                 }
 
-                if (!string.IsNullOrEmpty(_missonScript))
-                {
-                    // 읽어들인 스크립트 내용에서 jsMission 변수를 변경하는 스크립트 작성
-                    string script = $"var jsMission = {_missonScript}";
-                    string? modifyScript = _trackerScript.ToString()?.Replace("var jsMission = {jsMission}", script);
+                // 변경된 스크립트 실행
+                _ = webBrowser.EvaluateScriptAsync(_trackerScript).ConfigureAwait(false);
 
-                    // 변경된 스크립트 실행
-                    _ = webBrowser.EvaluateScriptAsync(modifyScript).ConfigureAwait(false);
-
-                    logger.LogTrace($"Load start address : {Address}");
-                    logger.LogTrace($"modifyScript : {modifyScript}");
-                    //_missonScript = string.Empty;
-                }
+                logger.LogTrace($"Load start address : {Address}");
+                logger.LogTrace($"modifyScript : {_trackerScript}");
+                //_missonScript = string.Empty;
 
             }
             finally
@@ -188,6 +199,8 @@ namespace PopupCash.Contents.ViewModels
             if (e.OldValue != e.NewValue)
             {
                 _isChangedAddress = true;
+                if (e.NewValue is string address)
+                    Address = address;
             }
         }
         private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1);
@@ -198,6 +211,7 @@ namespace PopupCash.Contents.ViewModels
             if (e.IsLoading || !_isChangedAddress) { return; }
             _isChangedAddress = false;
 
+            logger.LogDebug($"Loaded Url {Address}");
             //webBrowser.ShowDevTools();
         }
 
@@ -208,6 +222,7 @@ namespace PopupCash.Contents.ViewModels
 
         public override void OnDialogClosed()
         {
+            _webbrowser?.JavascriptObjectRepository.UnRegisterAll();
             CloseWindow();
         }
 
@@ -217,7 +232,6 @@ namespace PopupCash.Contents.ViewModels
             {
                 Address = moveAddress.Url;
                 _trackerScript = moveAddress.TrackerScript;
-                _missonScript = moveAddress.Script;
             }
         }
     }

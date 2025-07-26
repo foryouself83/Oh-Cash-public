@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Web;
+using System.Windows;
 using CefSharp;
 using CefSharp.Wpf;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -69,9 +71,44 @@ namespace PopupCash.Main.ViewModels
         {
             if (e.Browser is not IBrowser browser) return;
 
+            logger.LogDebug($"{e.IsLoading}");
+            if (e.Browser is not null &&
+                e.Browser.MainFrame is not null &&
+                !string.IsNullOrEmpty(e.Browser.MainFrame.Url))
+            {
+                Uri uri = new Uri(e.Browser.MainFrame.Url);
+                var query = HttpUtility.ParseQueryString(uri.Query);
+
+                if (query.AllKeys.Contains("error"))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var key in query.AllKeys)
+                    {
+                        sb.Append($"key: {key}, ");
+                        sb.AppendLine($"value:{query[key]}");
+                    }
+
+                    logger.LogDebug($"{sb.ToString()}");
+                    await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel, new DialogParameters()
+                        {
+                        }));
+                    }));
+                    return;
+                }
+            }
+
             if (await _loginService.GetTokenAsync(browser.MainFrame.Url) is not AuthTokenInfo authTokenInfo) return;
 
             var token = authTokenInfo.AccessToken;
+
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters($"accessToken={token}")
+                {
+                }));
+            }));
         }
 
         private void OnAddressChanged(object sender, DependencyPropertyChangedEventArgs e)

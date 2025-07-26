@@ -12,8 +12,8 @@
              BorderBrush="Transparent"
              BorderThickness="0"
              Padding="0"
-             MinHeight="194"
-             MinWidth="452">    
+             Width="374"
+             Height="176">    
     
     <UserControl.Resources>
         <ResourceDictionary>
@@ -144,15 +144,15 @@
                                      VerticalAlignment="Center"
                                      IsHitTestVisible="False"
                                      ImageSource="{StaticResource popupCashLogo}"
-                                     Margin="12 0 0 0">
+                                     Margin="15 0 0 0">
                 </buttons:ImageButton>
             </Grid>
             <Grid Grid.Column="1">
                 <StackPanel x:Name="stackPaneluserName" Orientation="Horizontal" 
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
+                            VerticalAlignment="Center"
                             Visibility="{Binding IsMember, Converter={StaticResource BooleanToVisibilityCollapsedConverter}}"
-                            Margin="0 16 16 0">
+                            Margin="0 0 20 0">
                     <buttons:ImageButton Text="{Binding User.Name}"
                                          FontSize="15"
                                          FontWeight="Bold"
@@ -168,7 +168,7 @@
                 <buttons:ImageButton Text="로그인/회원가입"
                                      TextPadding="0"
                                      FontSize="15"
-                                     Margin="0 0 15 0"
+                                     Margin="0 0 20 0"
                                      FontWeight="Bold"
                                      CornerRadius="15"
                                      HorizontalContentAlignment="Right"
@@ -200,7 +200,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
                     <StackPanel Orientation="Vertical"
-                                Margin="46 0 30 0">
+                                Margin="40 0 30 0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="15"
                                        Text="적립 가능"
@@ -262,7 +262,7 @@
             </Grid>
             <Grid Grid.Row="1">
                 <buttons:ImageButton CornerRadius="14"
-                                     Width="240"
+                                     Width="200"
                                      Height="30"
                                      Text="{Binding User.Cash, Converter={StaticResource CashToStringConverter}}"
                                      TextPadding="5 0 0 0"
@@ -302,7 +302,7 @@
                                      Foreground="{StaticResource textNaverExchange}"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Center"
-                                     Margin="32 0 32 0"
+                                     Margin="32 0 15 0"
                                      Command="{Binding GotoExchangeNeverPayCommand}">
                 </buttons:ImageButton>
             </Grid>

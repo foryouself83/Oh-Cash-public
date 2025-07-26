@@ -24,7 +24,6 @@ namespace PopupCash.Database.Models.Services.Impl
         {
             return Execute((con) =>
             {
-                _mapper.CreateAuthorizationTable(con);
                 return _mapper.SelectLastestAuthorization(con);
             });
         }
@@ -32,15 +31,27 @@ namespace PopupCash.Database.Models.Services.Impl
         {
             return Execute((con) =>
             {
-                _mapper.CreateAuthorizationTable(con);
                 return _mapper.SelectOrderByAccesToken(con, limit);
+            });
+        }
+        public bool InsertOrUpdateAuthorization(Authorization authorization)
+        {
+            return ExecuteTrans((con, transaction) =>
+            {
+                if (_mapper.SelectAccessToken(con, authorization.Type) is string)
+                {
+                    return _mapper.UpdateAuthorization(con, transaction, authorization) > 0;
+                }
+                else
+                {
+                    return _mapper.InsertAuthorization(con, transaction, authorization) > 0;
+                }
             });
         }
         public bool InsertAuthorization(Authorization authorization)
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateAuthorizationTable(con);
                 return _mapper.InsertAuthorization(con, transaction, authorization) > 0;
             });
         }
@@ -49,22 +60,15 @@ namespace PopupCash.Database.Models.Services.Impl
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateAuthorizationTable(con);
-
-                //// ID가 다른 경우 이전 ID를 불러와서 덮어쓴다.
-                //if (_mapper.SelectLastestAuthorization(con) is Authorization oldAuth)
-                //    authorization.Id = oldAuth.Id;
-
                 return _mapper.UpdateAuthorization(con, transaction, authorization) > 0;
             });
         }
 
-        public bool DeleteAuthorization(string id)
+        public bool DeleteAuthorization(string key)
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateAuthorizationTable(con);
-                return _mapper.DeleteAuthorization(con, transaction, id) > 0;
+                return _mapper.DeleteAuthorization(con, transaction, key) > 0;
             });
         }
     }

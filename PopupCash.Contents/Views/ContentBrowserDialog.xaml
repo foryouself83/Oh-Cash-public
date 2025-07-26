@@ -8,8 +8,7 @@
              xmlns:behaviours="clr-namespace:PopupCash.Contents.Presentation.Behaviours"
              xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
              xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
-             xmlns:converters="clr-namespace:PopupCash.Contents.Presentation.Converters"
-             
+             xmlns:converters="clr-namespace:PopupCash.Contents.Presentation.Converters"             
              Padding="0">
 
     <UserControl.Resources>
@@ -212,9 +211,13 @@
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="MinWidth"
-                    Value="{Binding WindowWidth, Mode=OneTime}" />
+                    Value="374" />
             <Setter Property="MinHeight"
-                    Value="{Binding WindowHeight, Mode=OneTime}" />
+                    Value="984" />
+            <Setter Property="Width"
+                    Value="374" />
+            <Setter Property="Height"
+                    Value="984" />
             <Setter Property="Padding"
                     Value="0" />
             <Setter Property="Margin"
@@ -231,26 +234,14 @@
         </Style>
     </prism:Dialog.WindowStyle>
 
-    <!--<behaviors:Interaction.Behaviors>
-        --><!--윈도우 위치 지정 Behavior--><!--
-        <behaviours:DefaultBrowerWindowPostionBehavior />
-    </behaviors:Interaction.Behaviors>-->
-
 
     <behaviors:Interaction.Behaviors>
         <!--윈도우를 이동시키는 Behavior-->
         <coreBehaviors:DragWindowBehavior />
+        <!--윈도우 위치 지정 Behavior-->
+        <behaviours:DefaultBrowerWindowPostionBehavior />
     </behaviors:Interaction.Behaviors>
     
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
-
     <Border Style="{StaticResource windowBaseBorder}"
             CornerRadius ="0"
             Background="{StaticResource windowBackground}">

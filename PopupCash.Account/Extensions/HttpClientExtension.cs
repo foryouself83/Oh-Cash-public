@@ -15,20 +15,27 @@ namespace PopupCash.Account.Extensions
 
         public static async Task<T> ReadContentFormJsonAsync<T>(this HttpResponseMessage httpResponse)
         {
-            httpResponse.EnsureSuccessStatusCode();
-
-            var content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (httpResponse.StatusCode == HttpStatusCode.Forbidden ||
-                httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+            try
             {
-                throw new ServiceAuthenticationException(content);
+                httpResponse.EnsureSuccessStatusCode();
+
+                var content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (httpResponse.StatusCode == HttpStatusCode.Forbidden ||
+                    httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new ServiceAuthenticationException(content);
+                }
+
+                if (JsonConvert.DeserializeObject<T>(content) is T response)
+                    return response;
+
+                throw new Exception($"Get {typeof(T).Name} response failed.");
             }
-
-            if (JsonConvert.DeserializeObject<T>(content) is T response)
-                return response;
-
-            throw new Exception($"Get {typeof(T).Name} response failed.");
+            catch
+            {
+                throw;
+            }
         }
 
         public static async Task<T> GetAsync<T>(this HttpClient httpClient, string uri)

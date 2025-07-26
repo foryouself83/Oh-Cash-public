@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Dapper.FluentMap;
 using PopupCash.Database.Conventions;
 using PopupCash.Database.Models.Locations;
+using PopupCash.Database.Models.Migrations;
 using PopupCash.Database.Models.Users;
 
 namespace PopupCash.Database.Models.Services.Impl
@@ -22,6 +23,7 @@ namespace PopupCash.Database.Models.Services.Impl
             FluentMapper.Initialize(config =>
             {
                 config.AddConvention<CamelToUnderscoreConvention>()
+                .ForEntitiesInAssembly(typeof(MigrationDatabase).Assembly, typeof(MigrationDatabase).Namespace)
                 .ForEntitiesInAssembly(typeof(Authorization).Assembly, typeof(Authorization).Namespace)
                 .ForEntitiesInAssembly(typeof(WindowPosition).Assembly, typeof(WindowPosition).Namespace);
             });
@@ -48,7 +50,6 @@ namespace PopupCash.Database.Models.Services.Impl
             {
                 Mode = Microsoft.Data.Sqlite.SqliteOpenMode.ReadWriteCreate,
                 Password = Password,
-
             }.ToString();
             return new Microsoft.Data.Sqlite.SqliteConnection(connectionString);
         }

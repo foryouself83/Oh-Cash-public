@@ -1,18 +1,18 @@
-﻿using System.Diagnostics;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using AutoMapper;
 using PopupCash.Account.Extensions;
-using PopupCash.Account.Models.Authenthications.Exceptions;
 using PopupCash.Account.Models.Authenthications.Impl;
 using PopupCash.Account.Models.Helpers;
+using PopupCash.Account.Models.Login.Impl;
+using PopupCash.Account.Models.Socials.Kakaos;
+using PopupCash.Core.Models.Constants;
 
 namespace PopupCash.Account.Models.Authenthications.Kakao.Impl
 {
     internal class KakaoAuthService : IKakaoAuthService
     {
-        private const string _restKey = "52bdfe88223fe2d87baa0780f5357b56";
-        private const string _redirectUri = "http://localhost:30000";
+        private const string _apiUrlBase = "https://kapi.kakao.com";
         private const string _authUrlBase = "https://kauth.kakao.com/oauth";
 
         /// <summary>
@@ -21,23 +21,50 @@ namespace PopupCash.Account.Models.Authenthications.Kakao.Impl
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IMapper _mapper;
 
+        public KakaoRestKey? KakaoRestKey { get; private set; }
+
         public KakaoAuthService(IHttpClientFactory httpClientFactory, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
         }
+
+
+        public void SetInitData(InitializeResponse response)
+        {
+            if (response.KakaoRestKey is null) throw new Exception($"{ConstantString.KakaoName}에 대한 키 값이 없습니다. ");
+            this.KakaoRestKey = response.KakaoRestKey;
+        }
         public string GetRedirectUrl()
         {
-            return _redirectUri;
+            if (KakaoRestKey is null) throw new Exception($"{ConstantString.KakaoName}에 대한 키 값이 없습니다. ");
+
+            return KakaoRestKey.RedirectUri!;
         }
 
         public string GetAuthCodeUrl()
         {
-            return UriHelper.CombineUri(_authUrlBase, $"/authorize?response_type=code&client_id={_restKey}&redirect_uri={_redirectUri}");
+            if (KakaoRestKey is null) throw new Exception($"{ConstantString.KakaoName}에 대한 키 값이 없습니다. ");
+
+            return UriHelper.CombineUri(_authUrlBase, $"/authorize?response_type=code&client_id={KakaoRestKey.RestApiKey}&redirect_uri={KakaoRestKey.RedirectUri}");
+        }
+
+        public async Task<bool> UnlinkAsync(string accessToken)
+        {
+            var uri = UriHelper.CombineUri(_apiUrlBase, $"/v1/user/unlink");
+
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await client.GetAsync<KakaoUnlinkResponse>(uri).ConfigureAwait(false);
+
+            return response.Id != 0;
         }
         public async Task<AuthTokenInfo> GetAuthorizationTokenAsync(string code)
         {
-            string data = string.Format($"grant_type=authorization_code&client_id={_restKey}&redirect_uri={_redirectUri}&code={code}");
+            if (KakaoRestKey is null) throw new Exception($"{ConstantString.KakaoName}에 대한 키 값이 없습니다. ");
+            string data = string.Format($"grant_type=authorization_code&client_id={KakaoRestKey.RestApiKey}&redirect_uri={KakaoRestKey.RedirectUri}&code={code}");
+            //string data = string.Format($"grant_type=authorization_code&client_id={KakaoRestKey.RestApiKey}&redirect_uri={KakaoRestKey.RedirectUri}&code={code}&client_secret={KakaoRestKey.ClientSecret}");
             var uri = UriHelper.CombineUri(_authUrlBase, $"/token");
 
             var client = _httpClientFactory.CreateClient();
@@ -51,9 +78,10 @@ namespace PopupCash.Account.Models.Authenthications.Kakao.Impl
             return _mapper.Map<AuthTokenInfo>(response);
         }
 
-        public async Task<AuthTokenInfo> RefreshAuthorizationTokenAsync(string refreshToken, string clientSecret)
+        public async Task<AuthTokenInfo> RefreshAuthorizationTokenAsync(string refreshToken)
         {
-            string data = string.Format($"grant_type=authorization_code&client_id={_restKey}&refresh_token={refreshToken}&client_secret={clientSecret}");
+            if (KakaoRestKey is null) throw new Exception($"{ConstantString.KakaoName}에 대한 키 값이 없습니다. ");
+            string data = string.Format($"grant_type=refresh_tokene&client_id={KakaoRestKey.RestApiKey}&refresh_token={refreshToken}");
             var uri = UriHelper.CombineUri(_authUrlBase, $"/token");
 
             var client = _httpClientFactory.CreateClient();
@@ -82,29 +110,9 @@ namespace PopupCash.Account.Models.Authenthications.Kakao.Impl
 
             return await client.PostAsync<KakaoLogout>(uri, requestBody).ConfigureAwait(false);
         }
-
-        public async Task<bool> IsValidateTokenAsync(string accessToken)
+        public void SetSocialService(string name)
         {
-            var uri = UriHelper.CombineUri(_authUrlBase, $"/v1/user/access_token_info");
-
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "");
-
-            try
-            {
-                var response = await client.GetAsync<KakaoValidateTokenResponsse>(uri).ConfigureAwait(false);
-            }
-            catch (ServiceAuthenticationException serviceAuthenticationException)
-            {
-                Debug.WriteLine(serviceAuthenticationException.Content.ToString());
-                return false;
-            }
-            catch
-            {
-                throw;
-            }
-
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

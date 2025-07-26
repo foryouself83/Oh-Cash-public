@@ -12,9 +12,13 @@ namespace PopupCash.Account.Models.Users.Impl
         /// httpClientFactory
         /// </summary>
         private readonly IHttpClientFactory _httpClientFactory;
-        public UserService(IHttpClientFactory httpClientFactory)
+
+        private readonly ISocialUserService _socialUserService;
+        public UserService(IHttpClientFactory httpClientFactory, ISocialUserService socialUserService)
         {
             _httpClientFactory = httpClientFactory;
+
+            _socialUserService = socialUserService;
         }
 
         public async Task<UserResponse> GetCurrentUser(string accesstoken)
@@ -30,5 +34,14 @@ namespace PopupCash.Account.Models.Users.Impl
             return await client.GetAsync<UserResponse>(apiUrl).ConfigureAwait(false);
         }
 
+        public async Task<string> GetSocialUserEmail(string accessToken)
+        {
+            return await _socialUserService.GetSocialUserEmail(accessToken).ConfigureAwait(false);
+        }
+
+        public void SetSocialService(string name)
+        {
+            _socialUserService.SetSocialService(name);
+        }
     }
 }

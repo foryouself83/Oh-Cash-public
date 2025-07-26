@@ -8,14 +8,11 @@ namespace PopupCash.Core.Models.Parameters
 
         public string TrackerScript;
 
-        public string Script;
-
 
         public MoveAddressParameter()
         {
             Url = string.Empty;
             TrackerScript = string.Empty;
-            Script = string.Empty;
         }
     }
 }

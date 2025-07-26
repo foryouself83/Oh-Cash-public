@@ -1,10 +1,8 @@
 ﻿using CefSharp;
-using PopupCash.Account.Models.Login;
-using PopupCash.Account.Models.Login.Impl;
-using PopupCash.Account.Models.Users;
-using PopupCash.Account.Models.Users.Impl;
+
 using PopupCash.Contents.ViewModels;
 using PopupCash.Contents.Views;
+
 using Prism.Ioc;
 using Prism.Modularity;
 
@@ -38,6 +36,8 @@ namespace PopupCash.Contents.Models.Modules
                 // 파일로부터 로드된 리소스에 대한 파일 액세스 허용
                 //settings.CefCommandLineArgs.Add("allow-file-access-from-files", "1"); 
 
+                settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 /CefSharp Browser" + Cef.CefSharpVersion;
+
                 DependencyChecker.AssertAllDependenciesPresent(settings.Locale, settings.LocalesDirPath, settings.ResourcesDirPath, settings.PackLoadingDisabled, settings.BrowserSubprocessPath);
 
                 CefSharp.Cef.Initialize(settings);
@@ -51,9 +51,6 @@ namespace PopupCash.Contents.Models.Modules
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<ILoginService, LoginService>();
-            containerRegistry.RegisterSingleton<IUserService, UserService>();
-
             containerRegistry.RegisterDialog<ContentBrowserDialog, ContentBrowserDialogViewModel>();
             containerRegistry.RegisterDialog<DataCollectionInstructionsDialog, DataCollectionInstructionsDialogViewModel>();
             containerRegistry.RegisterDialog<AccumulateBrowserDialog, AccumulateBrowserDialogVIewModel>();

@@ -8,9 +8,9 @@
              xmlns:coreBehaviors="clr-namespace:PopupCash.Core.Presentation.Behavior;assembly=PopupCash.Core"
              xmlns:coreConverters="clr-namespace:PopupCash.Core.Presentation.Converters;assembly=PopupCash.Core"
              xmlns:converters="clr-namespace:PopupCash.Controls.Presentation.Converters;assembly=PopupCash.Controls"
-             prism:ViewModelLocator.AutoWireViewModel="True"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Width="400"
-             Height="352">
+             Height="450">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -86,7 +86,7 @@
     <prism:Dialog.WindowStyle>
         <Style TargetType="{x:Type Window}">
             <Setter Property="prism:Dialog.WindowStartupLocation"
-                    Value="Manual" />
+                    Value="CenterScreen" />
             <Setter Property="ResizeMode"
                     Value="NoResize" />
             <Setter Property="ShowInTaskbar"
@@ -120,7 +120,7 @@
             <Setter Property="AllowsTransparency"
                     Value="true" />
             <Setter Property="Background"
-                    Value="Transparent" />            
+                    Value="Transparent" />
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CaptionHeight="0"
@@ -136,59 +136,65 @@
         <coreBehaviors:DragWindowBehavior />
     </behaviors:Interaction.Behaviors>
 
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
-
     <Border Style="{StaticResource windowBaseBorder}"
             Background="{StaticResource windowBackground}">
         <Grid>
+            <buttons:ImageButton CornerRadius="0"
+                                 ImageSource="{StaticResource close}"
+                                 ImageWidth="16"
+                                 ImageHeight="16"
+                                 TextPadding="0"
+                                 Margin="0 10 10 0"
+                                 Panel.ZIndex="1"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Top"
+                                 AllowMouseOverColor="True"
+                                 Command="{Binding CancelCommand}">
+            </buttons:ImageButton>
+            
             <!--BackGround Image-->
             <Image Source="/PopupCash.Main;Component/Resources/Images/loginBackgruond.png"
-                   IsHitTestVisible="False"/>
+                   IsHitTestVisible="False" />
 
             <TextBlock Text="로그인"
                        FontWeight="Bold"
-                       FontSize="24"
-                       Width="62"
-                       Height="30"
+                       FontSize="24"                       
                        VerticalAlignment="Top"
-                       HorizontalAlignment="Left"
+                       HorizontalAlignment="Center"
                        IsHitTestVisible="False"
-                       Margin="40 52 0 0" />
+                       Margin="0 20 0 0" />
 
-            <textBoxs:HolderTextBox Margin="40 124 40 209"
+            <textBoxs:HolderTextBox Margin="20 124 0 0"
                                     Width="320"
                                     FontSize="15"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
                                     HolderText="아이디 (이메일)을 입력하세요"
                                     NextFocusElement="{Binding ElementName=loginPasswordBox}"
-                                    Text="{Binding LoginEmail, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Text="{Binding LoginEmail, UpdateSourceTrigger=PropertyChanged}" />
 
             <Border Style="{StaticResource seperatorHorizontalBorder}"
-                    Margin="40 151 50 0" />
+                    Margin="20 151 50 0" />
 
-            <PasswordBox x:Name="loginPasswordBox" 
+            <PasswordBox x:Name="loginPasswordBox"
                          Width="320"
                          Height="19"
-                         Margin="40 174 40 159"
+                         Margin="20 174 0 0"
                          PasswordChar="*"
                          FontSize="15"
                          Tag="비밀번호를 입력하세요"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
                          PasswordChanged="PasswordBox_PasswordChanged"
                          Style="{StaticResource holerPasswordBox}" />
 
             <Border Style="{StaticResource seperatorHorizontalBorder}"
-                    Margin="40 201 40 0" />
+                    Margin="20 201 0 0" />
 
-            <buttons:ImageButton Width="320"
+            <buttons:ImageButton Width="360"
                                  Height="44"
-                                 Margin="40 232 0 0"
+                                 Margin="0 232 0 0"
+                                 HorizontalAlignment="Center"
                                  CornerRadius="22"
                                  Foreground="{StaticResource buttonCancelTextColor}"
                                  Background="{StaticResource buttonCancelBackground}"
@@ -198,38 +204,80 @@
                                  IsCancel="True"
                                  Command="{Binding CancelCommand}" />
 
-            <buttons:ImageButton Width="320"
+            <buttons:ImageButton Width="360"
                                  Height="44"
-                                 Margin="40 232 0 0"
+                                 Margin="0 232 0 0"
+                                 HorizontalAlignment="Center"
                                  CornerRadius="22"
                                  Foreground="{StaticResource buttonLoginColor}"
                                  Background="{StaticResource buttonOkBackground}"
                                  Text="로그인"
                                  FontSize="15"
                                  FontWeight="Bold"
-                                 IsDefault="True"                                 
+                                 IsDefault="True"
                                  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanToInverseBooleanConverter}}"
-                                 Command="{Binding LoginCommand}"/>
+                                 Command="{Binding LoginCommand}" />
 
 
-            <!--<buttons:ImageButton Width="56"
-                                 Height="16"
-                                 Margin="83 306 261 30"
-                                 CornerRadius="0"
-                                 Foreground="{StaticResource textDarkGrayColor}"
-                                 Text="카카오"
-                                 FontSize="13"
-                                 Command="{Binding KakaoLoginCommand}" />-->
-           
             <buttons:ImageButton Width="46"
                                  Height="16"
-                                 Margin="0 306 0 0"
+                                 Margin="0 310 0 0"
                                  HorizontalAlignment="Center"
                                  CornerRadius="0"
                                  Foreground="{StaticResource textDarkGrayColor}"
                                  Text="회원가입"
                                  FontSize="13"
                                  Command="{Binding JoinCommand}" />
+
+            <Border Style="{StaticResource seperatorHorizontalBorder}"
+                    Margin="20 375 0 0" />
+
+            <TextBlock Text="간편하게 시작하기"
+                       FontSize="13"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                       IsHitTestVisible="False"
+                       Margin="20 400 0 0"
+                       Foreground="{StaticResource texthodler}" />
+
+            <buttons:ImageButton ImageWidth="33"
+                                 ImageHeight="33"
+                                 ImageSource="/PopupCash.Main;Component/Resources/Images/Google_login.png"
+                                 Margin="0 390 103 0"
+                                 CornerRadius="0"
+                                 Foreground="{StaticResource textDarkGrayColor}"
+                                 TextPadding="0"
+                                 FontSize="13"
+                                 HorizontalAlignment="Right"
+                                 Command="{Binding GoogleLoginCommand}" />
+
+            <buttons:ImageButton ImageWidth="33"
+                                 ImageHeight="33"
+                                 ImageSource="/PopupCash.Main;Component/Resources/Images/kakao_login.png"
+                                 Margin="0 390 63 0"
+                                 CornerRadius="0"
+                                 Foreground="{StaticResource textDarkGrayColor}"
+                                 TextPadding="0"
+                                 FontSize="13"
+                                 HorizontalAlignment="Right"
+                                 Command="{Binding KakaoLoginCommand}">
+                <buttons:ImageButton.Clip>
+                    <EllipseGeometry Center="15.9,15.9"
+                                     RadiusX="16.5"
+                                     RadiusY="16.5" />
+                </buttons:ImageButton.Clip>
+            </buttons:ImageButton>
+
+            <buttons:ImageButton ImageWidth="33"
+                                 ImageHeight="33"
+                                 ImageSource="/PopupCash.Main;Component/Resources/Images/naver_login.png"
+                                 Margin="0 390 20 0"
+                                 CornerRadius="0"
+                                 Foreground="{StaticResource textDarkGrayColor}"
+                                 TextPadding="0"
+                                 FontSize="13"
+                                 HorizontalAlignment="Right"
+                                 Command="{Binding NaverLoginCommand}" />
 
             <!--<buttons:ImageButton Width="56"
                                  Height="16"

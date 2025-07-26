@@ -1,15 +1,17 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using Microsoft.Extensions.Logging;
-
 using PopupCash.Account.Models.Login;
 using PopupCash.Account.Models.Login.Impl;
 using PopupCash.Account.Models.Users;
 using PopupCash.Common.ViewModels;
 using PopupCash.Controls.Buttons;
+using PopupCash.Core.Extensions;
+using PopupCash.Core.Models.Constants;
 using PopupCash.Core.Models.Parameters;
 using PopupCash.Database.Models.Services;
 using PopupCash.Database.Models.Users;
@@ -39,21 +41,18 @@ namespace PopupCash.Main.ViewModels
         private readonly ILoginService _loginService;
         private readonly IUserService _userService;
         private readonly IAuthorizationDataService _authorizationService;
+
+        private readonly ILoggerFactory _loggerFactory;
         #endregion
 
         public override event Action<IDialogResult>? RequestClose;
-
-        /// <summary>
-        /// 가입 유형(0: 힐링캐시, 1:구글, 2: 페이스북, 3: 카카오, 4: 네이버)
-        /// </summary>
-        private string _loginType;
 
         [ObservableProperty]
         private JoinInfo _joinInfo;
 
         public JoinDialogViewModel(IDialogService dialogService, IEventAggregator eventAggregator, IMapper mapper,
-            ILoginService loginService, IUserService userService,
-            IAuthorizationDataService authorizationService, ILogger<JoinDialogViewModel> loggor) : base(loggor)
+            ILoginService loginService, IUserService userService, IAuthorizationDataService authorizationService,
+            ILogger<JoinDialogViewModel> loggor, ILoggerFactory loggerFactory) : base(loggor)
         {
             _dialogService = dialogService;
             _eventAggregator = eventAggregator;
@@ -65,12 +64,13 @@ namespace PopupCash.Main.ViewModels
 
             _authorizationService = authorizationService;
 
+            _loggerFactory = loggerFactory;
+
             Title = "회원 가입";
-            _loginType = "0";
 
             // 윈도우 크기
             WindowWidth = 400;
-            WindowHeight = 858;
+            //WindowHeight = 858;
 
             JoinInfo = new JoinInfo();
 
@@ -89,7 +89,14 @@ namespace PopupCash.Main.ViewModels
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            //  TODO. Parameter에 따라 _loginType 변경, SNS 로그인으로 출력됐을 경우 이메일 주소 자동 입력 후 Readonly 처리
+            if (parameters.TryGetValue("loginType", out string loginType))
+            {
+                JoinInfo.LoginType = loginType;
+            }
+            if (parameters.TryGetValue("email", out string email))
+            {
+                JoinInfo.Email = email;
+            }
 
         }
 
@@ -109,41 +116,38 @@ namespace PopupCash.Main.ViewModels
             {
             }));
         }
-        public bool CanJoinExcute()
-        {
-            //return !IsBusy;
-            return !IsBusy && JoinInfo.ValidateEmail() && JoinInfo.ValidatePassword() && JoinInfo.ValidateChecked();
-        }
 
         //[RelayCommand(CanExecute = "CanJoinExcute")]
         [RelayCommand]
         public async Task Join()
         {
-            if (!JoinInfo.IsIdentityVerification) throw new Exception("본인 인증이 완료되지 않았습니다.");
-            if (!JoinInfo.ValidateEmail()) throw new Exception($"이메일 형식이 다릅니다.");
-            if (!JoinInfo.ValidatePassword()) throw new Exception($"비밀 번호가 일치하지 않습니다.");
-            if (!JoinInfo.ValidateChecked()) throw new Exception($"동의 사항이 모두 체크되어야 합니다.");
+            //if (!JoinInfo.IsIdentityVerification) throw new Exception("본인 인증이 완료되지 않았습니다.");
+            //if (!JoinInfo.ValidateEmail()) throw new Exception($"이메일 형식이 다릅니다.");
+            //if (_loginType.Equals(ConstantString.AppType) && !JoinInfo.ValidatePassword()) throw new Exception($"비밀 번호가 일치하지 않습니다.");
+            //if (!JoinInfo.ValidateChecked()) throw new Exception($"동의 사항이 모두 체크되어야 합니다.");
 
             if (_authorizationService.SelectLastestAuthorization() is not Authorization authorization) throw new Exception("액세스 토큰 값이 없습니다.");
 
             var joinRequest = _mapper.Map<JoinRequest>(JoinInfo);
             joinRequest.Key = authorization.Key;
-            var JoinResponse = await IsBusyFor(() => _loginService.JoinAsync(joinRequest));
+            var joinResponse = await IsBusyFor(() => _loginService.JoinAsync(joinRequest));
 
-            if (JoinResponse.Result == 0)
+            if (joinResponse.Result == 0)
             {
-                var auth = _mapper.Map<Authorization>(JoinResponse);
+                var auth = _mapper.Map<Authorization>(joinResponse);
 
-                var command = new RequestUserCommand(_mapper, _userService);
+                var command = new RequestUserCommand(_mapper, _userService, _loggerFactory.CreateLogger<RequestUserCommand>());
 
                 await IsBusyFor(async () =>
                 {
                     if (await command.ExecuteAsync(auth.AccessToken!) is not CurrentUser currentUser) return;
 
-                    authorization.Type = _loginType;
-                    authorization.Key = currentUser.Key;
+                    authorization.Type = JoinInfo.LoginType;
+                    authorization.PomissionKey = currentUser.PomissionKey!;
                     authorization.AccessToken = auth.AccessToken;
-                    _authorizationService.UpdateAuthorization(authorization);
+                    authorization.Policy = false;
+                    var isUpdate = _authorizationService.InsertOrUpdateAuthorization(authorization);
+                    logger.LogDebug($"Update Authorize is {isUpdate}");
 
                     RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters()
                     {
@@ -153,7 +157,26 @@ namespace PopupCash.Main.ViewModels
             }
             else
             {
-                throw new Exception(JoinResponse.Msg);
+                StringBuilder sb = new StringBuilder();
+                switch (joinResponse.Result)
+                {
+                    case 5:
+                        {
+                            sb.Append(string.Format($"{ConstantString.AppName}에 "));
+                        }
+                        break;
+                    case 7:
+                        {
+                            if (!string.IsNullOrEmpty(joinResponse.Type))
+                                sb.Append(string.Format($"{joinResponse.Type.GetJoinType()}에 "));
+                        }
+                        break;
+                }
+
+                sb.Append(joinResponse.Msg);
+
+                logger.LogDebug($"Result: {joinResponse.Result}");
+                throw new Exception(sb.ToString());
             }
         }
 

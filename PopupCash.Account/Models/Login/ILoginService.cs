@@ -45,10 +45,19 @@ namespace PopupCash.Account.Models.Login
         public Task<PrivacyResponse> GetPrivacyAsync();
 
 
+        public void SetInitData(InitializeResponse response);
+
+        public PomissionInfo? GetPomissionInfo();
 
         #region SNS Login
+        public void SetSocialService(string name);
         public string GetAuthCodeUrl();
         public Task<AuthTokenInfo?> GetTokenAsync(string uri);
+        /// <summary>
+        /// 연결 끊기
+        /// </summary>
+        /// <returns></returns>
+        public Task<bool> UnlinkAsync(string accessToken);
         #endregion
     }
 }

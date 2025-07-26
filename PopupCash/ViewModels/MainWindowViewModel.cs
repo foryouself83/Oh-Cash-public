@@ -27,8 +27,8 @@ namespace PopupCash.ViewModels
 
             Title = "오테크";
 
-            WindowWidth = 452;
-            WindowHeight = 194;
+            WindowWidth = 374;
+            WindowHeight = 176;
 
             Initialize();
         }

@@ -16,14 +16,16 @@ namespace PopupCash.Database.Models.Mappers
         {
             return connection.Execute($@"
                 CREATE TABLE IF NOT EXISTS AUTHORIZATION (
-                    KEY TEXT PRIMARY KEY NOT NULL,
-                    TYPE TEXT NOT NULL,                    
-                    ACCESS_TOKEN TEXT NOT NULL,
+                    TYPE TEXT PRIMARY KEY NOT NULL,                    
+                    KEY TEXT,                    
+                    POMISSION_KEY TEXT,
+                    ACCESS_TOKEN TEXT NOT NULL,                    
                     REFRESH_TOKEN TEXT,
+                    POLICY INTEGER NOT NULL,
                     UPDATE_DATE TEXT NOT NULL
                 );
 
-                CREATE INDEX IF NOT EXISTS IX_AUTHORIZATION_KEY ON AUTHORIZATION (KEY)");
+                CREATE INDEX IF NOT EXISTS IX_AUTHORIZATION_TYPE ON AUTHORIZATION (TYPE)");
         }
         public Authorization? SelectLastestAuthorization(IDbConnection connection)
         {
@@ -33,11 +35,11 @@ namespace PopupCash.Database.Models.Mappers
                 LIMIT 1");
         }
 
-        public string? SelectAccessToken(IDbConnection connection, string key)
+        public string? SelectAccessToken(IDbConnection connection, string type)
         {
             return connection.QuerySingleOrDefault<string>($@"
                 SELECT ACCESS_TOKEN from AUTHORIZATION
-                WHERE KEY=@key", new { key });
+                WHERE TYPE=@type", new { type });
         }
 
         public IEnumerable<string> SelectOrderByAccesToken(IDbConnection connection, int limit)
@@ -55,9 +57,9 @@ namespace PopupCash.Database.Models.Mappers
         {
             return connection.Execute($@"
                 INSERT INTO AUTHORIZATION 
-                    (KEY, TYPE, ACCESS_TOKEN, REFRESH_TOKEN, UPDATE_DATE)
+                    (TYPE, KEY, POMISSION_KEY, ACCESS_TOKEN, REFRESH_TOKEN, POLICY, UPDATE_DATE)
                 VALUES 
-                    (@Key, @Type, @AccessToken, @RefreshToken, DATETIME('NOW', 'LOCALTIME'))", authorization, transaction);
+                    (@Type, @Key, @PomissionKey, @AccessToken, @RefreshToken, @Policy, DATETIME('NOW', 'LOCALTIME'))", authorization, transaction);
         }
 
 
@@ -65,18 +67,21 @@ namespace PopupCash.Database.Models.Mappers
         {
             return connection.Execute($@"
                 UPDATE AUTHORIZATION
-                    SET TYPE = @Type,
+                    SET KEY = @Key,
+                        POMISSION_KEY = @PomissionKey,
                         ACCESS_TOKEN = @AccessToken,
                         REFRESH_TOKEN = @RefreshToken,
+                        POLICY = @Policy,
                         UPDATE_DATE = DATETIME('NOW', 'LOCALTIME')
-                    WHERE KEY = @Key", authorization, transaction);
+                    WHERE TYPE = @Type", authorization, transaction);
         }
 
-        public int DeleteAuthorization(IDbConnection connection, IDbTransaction transaction, string type)
+        public int DeleteAuthorization(IDbConnection connection, IDbTransaction transaction, string key)
         {
             return connection.Execute($@"
                 DELETE FROM AUTHORIZATION
-                    WHERE KEY = @Key", new { type }, transaction);
+                    WHERE KEY = @key 
+                    OR POMISSION_KEY = @key", new { key }, transaction);
         }
 
     }

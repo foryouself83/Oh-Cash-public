@@ -19,47 +19,57 @@ namespace PopupCash.Database.Models.Services.Impl
             });
         }
 
-        public bool IsExistUser(string email)
+        public bool IsExistUser(string accessToekn)
         {
             return Execute((con) =>
             {
-                _mapper.CreateUserTable(con);
-                return _mapper.IsExistUser(con, email) == 1;
+                return _mapper.IsExistUser(con, accessToekn) == 1;
             });
         }
 
-        public User? SelectUser(string email)
+        public UserData? SelectUser(string accessToekn)
         {
             return Execute((con) =>
             {
-                _mapper.CreateUserTable(con);
-                return _mapper.SelectUser(con, email);
+                return _mapper.SelectUser(con, accessToekn);
             });
         }
-        public bool InsertUser(User user)
+
+        public bool InsertOrUpdateAuthorization(UserData user)
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateUserTable(con);
+                if (_mapper.SelectUser(con, user.AccessToken) is null)
+                {
+                    return _mapper.InsertUser(con, transaction, user) > 0;
+                }
+                else
+                {
+                    return _mapper.UpdateUser(con, transaction, user) > 0;
+                }
+            });
+        }
+        public bool InsertUser(UserData user)
+        {
+            return ExecuteTrans((con, transaction) =>
+            {
                 return _mapper.InsertUser(con, transaction, user) > 0;
             });
         }
 
-        public bool UpdateUser(User user)
+        public bool UpdateUser(UserData user)
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateUserTable(con);
                 return _mapper.UpdateUser(con, transaction, user) > 0;
             });
         }
 
-        public bool DeleteUser(string email)
+        public bool DeleteUser(string accessToekn)
         {
             return ExecuteTrans((con, transaction) =>
             {
-                _mapper.CreateUserTable(con);
-                return _mapper.DeleteUser(con, transaction, email) > 0;
+                return _mapper.DeleteUser(con, transaction, accessToekn) > 0;
             });
         }
     }

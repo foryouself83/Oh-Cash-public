@@ -7,7 +7,7 @@
              xmlns:behaviours="clr-namespace:PopupCash.Contents.Presentation.Behaviours"
              xmlns:buttons="clr-namespace:PopupCash.Controls.Buttons;assembly=PopupCash.Controls"
              xmlns:converters="clr-namespace:PopupCash.Contents.Presentation.Converters"
-             Width="420"
+             Width="374"
              Height="304"
              Padding="0">
 
@@ -26,7 +26,7 @@
                 <Setter Property="VerticalContentAlignment"
                         Value="Center" />
                 <Setter Property="Width"
-                        Value="150" />
+                        Value="125" />
                 <Setter Property="Height"
                         Value="44" />
                 <Setter Property="FontSize"
@@ -42,7 +42,7 @@
                 <Setter Property="Padding"
                         Value="24 8 8 8" />
                 <Setter Property="FontSize"
-                        Value="15" />
+                        Value="13" />
                 <Setter Property="HorizontalAlignment"
                         Value="Left" />
                 <Setter Property="VerticalAlignment"
@@ -76,7 +76,7 @@
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="Width"
-                    Value="420" />
+                    Value="374" />
             <Setter Property="Height"
                     Value="304" />
             <Setter Property="Padding"
@@ -109,15 +109,15 @@
                     <TextBlock Text="정보 수집 안내"
                                FontSize="18"
                                FontWeight="Bold"
-                               Margin="159 32 159 0"
+                               Margin="0 32 0 0"
                                TextAlignment="Center"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="티앱스토어에서는 혜택 참여에 필요한 정보를 수집하고 있습니다."
                                FontSize="13"
-                               Width="380"
+                               Width="330"
                                Height="21"
-                               Margin="20 10 10 0"
+                               Margin="0 10 0 0"
                                TextAlignment="Center"
                                HorizontalAlignment="Center"/>
                 </StackPanel>
@@ -128,13 +128,17 @@
                           RowHeight="33"
                           BorderBrush="Black"
                           BorderThickness="1 1 0 0"
-                          Margin="20 15 20 0"
-                          Width="372"
+                          Margin="0 15 0 0"
+                          Width="332"
                           Height="100"
                           IsReadOnly="True"
-                          IsHitTestVisible="False"             
+                          IsHitTestVisible="False"      
+                          HorizontalAlignment="Center"
                           HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Disabled"
+                          IsTabStop="False"
+                          Focusable="False"
+                          KeyboardNavigation.TabNavigation="None"
                           ItemsSource="{Binding DataCollections}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Name}"
@@ -184,7 +188,7 @@
                                          HorizontalAlignment="Left"
                                          Foreground="{StaticResource buttonCancelTextColor}"
                                          Background="{StaticResource buttonCancelBackground}"
-                                         Margin="50 24 0 30"
+                                         Margin="40 24 0 30"
                                          IsCancel="true"
                                          Command="{Binding CancelCommand}" />
                 </Grid>
@@ -193,7 +197,7 @@
                                          HorizontalAlignment="Right"
                                          Foreground="{StaticResource buttonOkTextColor}"
                                          Background="{StaticResource buttonOkBackground}"
-                                         Margin="0 24 50 30"
+                                         Margin="0 24 40 30"
                                          IsDefault="True"
                                          Command="{Binding OkCommand}" />
                 </Grid>

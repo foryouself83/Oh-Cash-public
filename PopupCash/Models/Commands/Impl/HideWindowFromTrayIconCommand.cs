@@ -7,6 +7,8 @@ namespace PopupCash.Models.Commands.Impl
     {
         public override void Execute(object? parameter)
         {
+            base.Execute(parameter);
+
             var windows = System.Windows.Application.Current.Windows.OfType<Window>();
 
             foreach (var window in windows)

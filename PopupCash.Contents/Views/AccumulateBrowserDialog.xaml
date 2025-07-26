@@ -44,13 +44,13 @@
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="MinWidth"
-                    Value="{Binding WindowWidth, Mode=OneTime}" />
+                    Value="374" />
             <Setter Property="MinHeight"
-                    Value="{Binding WindowHeight, Mode=OneTime}" />
+                    Value="800" />
             <Setter Property="Width"
-                    Value="{Binding WindowWidth, Mode=OneTime}" />
+                    Value="374" />
             <Setter Property="Height"
-                    Value="{Binding WindowHeight, Mode=OneTime}" />
+                    Value="800" />
             <Setter Property="Padding"
                     Value="0" />
             <Setter Property="Margin"
@@ -72,14 +72,13 @@
     <behaviors:Interaction.Behaviors>
         <!--윈도우를 이동시키는 Behavior-->
         <coreBehaviors:DragWindowBehavior />
+        <!--윈도우 위치 지정 Behavior-->
+        <behaviours:DefaultAccumulateWindowPostionBehavior />
     </behaviors:Interaction.Behaviors>
 
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     

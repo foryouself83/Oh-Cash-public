@@ -10,6 +10,8 @@ namespace PopupCash.Models.Commands.Impl
             if (parameter is null) return;
             if (GetTaskbarWindow(parameter) is not Window window) return;
 
+            base.Execute(parameter);
+
             window.Show();
             window.Activate();
             window.Topmost = true;

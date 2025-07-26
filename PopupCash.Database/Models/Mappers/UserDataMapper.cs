@@ -14,60 +14,52 @@ namespace PopupCash.Database.Models.Mappers
         {
             return connection.Execute($@"
                 CREATE TABLE IF NOT EXISTS USER_INFO (
-                    EMAIL TEXT PRIMARY KEY NOT NULL,                    
-                    NAME TEXT NOT NULL,
-                    PROFILE_IMAGE_URL TEXT,
-                    CASH TEXT NOT NULL,
-                    MISSON_POINT TEXT NOT NULL,
-                    GRADE TEXT NOT NULL,
+                    ACCESS_TOKEN TEXT PRIMARY KEY NOT NULL,                    
+                    MAC_ADDRESS TEXT NOT NULL,
                     UPDATE_DATE TEXT NOT NULL
                 );
 
-                CREATE INDEX IF NOT EXISTS IX_USER_INFO_EMAIL ON USER_INFO (EMAIL)");
+                CREATE INDEX IF NOT EXISTS IX_USER_INFO_ACCESS_TOKEN ON USER_INFO (ACCESS_TOKEN)");
         }
 
-        public User? SelectUser(IDbConnection connection, string email)
+        public UserData? SelectUser(IDbConnection connection, string accessToken)
         {
-            return connection.QuerySingleOrDefault<User>($@"
+            return connection.QuerySingleOrDefault<UserData>($@"
                 SELECT * from USER_INFO
-                WHERE EMAIL=@email", new { email });
+                WHERE ACCESS_TOKEN=@accessToken", new { accessToken });
         }
 
-        public int IsExistUser(IDbConnection connection, string email)
+        public int IsExistUser(IDbConnection connection, string accessToken)
         {
             return connection.QuerySingleOrDefault<int>($@"
-                SELECT EXISTS (SELECT 1 FROM USER_INFO WHERE EMAIL = @email)", new { email });
+                SELECT EXISTS (SELECT 1 FROM USER_INFO WHERE ACCESS_TOKEN = @accessToken)", new { accessToken });
         }
 
-        internal int InsertUser(IDbConnection connection, IDbTransaction transaction, User user)
+        internal int InsertUser(IDbConnection connection, IDbTransaction transaction, UserData user)
         {
             return connection.Execute($@"
                 INSERT INTO USER_INFO 
-                    (EMAIL, NAME, PROFILE_IMAGE_URL, CASH, MISSON_POINT, GRADE, UPDATE_DATE)
+                    (ACCESS_TOKEN, MAC_ADDRESS, UPDATE_DATE)
                 VALUES 
-                    (@Email, @Name, @ProfileImageUrl, @Cash, @MissionPoint, @Grade, DATETIME('NOW', 'LOCALTIME'))", user, transaction);
+                    (@AccessToken, @MacAddress, DATETIME('NOW', 'LOCALTIME'))", user, transaction);
         }
 
-        internal int UpdateUser(IDbConnection connection, IDbTransaction transaction, User user)
+        internal int UpdateUser(IDbConnection connection, IDbTransaction transaction, UserData user)
         {
             return connection.Execute($@"
                 UPDATE USER_INFO 
                 SET 
-                    NAME = @Name,
-                    PROFILE_IMAGE_URL = @ProfileImageUrl,
-                    CASH = @Cash,
-                    MISSON_POINT = @MissionPoint
-                    GRADE = @Grade,
+                    MAC_ADDRESS = @MacAddress,
                     UPDATE_DATE = DATETIME('NOW', 'LOCALTIME')
                 WHERE 
-                    EMAIL = @Email", user, transaction);
+                    ACCESS_TOKEN = @AccessToken", user, transaction);
         }
 
-        internal int DeleteUser(IDbConnection connection, IDbTransaction transaction, string email)
+        internal int DeleteUser(IDbConnection connection, IDbTransaction transaction, string accessToken)
         {
             return connection.Execute($@"
                 DELETE FROM USER_INFO
-                    WHERE EMAIL = @email", new { email }, transaction);
+                    WHERE ACCESS_TOKEN = @accessToken", new { accessToken }, transaction);
         }
     }
 }

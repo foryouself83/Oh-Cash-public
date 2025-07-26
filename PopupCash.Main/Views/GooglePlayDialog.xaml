@@ -46,7 +46,7 @@
     <prism:Dialog.WindowStyle>
         <Style TargetType="{x:Type Window}">
             <Setter Property="prism:Dialog.WindowStartupLocation"
-                    Value="CenterOwner" />
+                    Value="CenterScreen" />
             <Setter Property="ResizeMode"
                     Value="NoResize" />
             <Setter Property="ShowInTaskbar"
@@ -91,16 +91,6 @@
         <coreBehaviors:DragWindowBehavior />
     </behaviors:Interaction.Behaviors>
 
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadedDialogCommand}" />
-        </behaviors:EventTrigger>
-        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-            <prism:InvokeCommandAction Command="{Binding MouseLeftButtonDownDialogCommand}" />
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
-
-
     <Border Style="{StaticResource windowBaseBorder}"
             Background="{StaticResource windowBackground}"
             Padding="10">
@@ -110,7 +100,7 @@
                                     Margin="0 5 5 0"
                                     Command="{Binding CancelCommand}" />
 
-            <TextBlock Text="N페이 교환은 팝업캐시 앱에서만 가능합니다."
+            <TextBlock Text="N페이 교환은 오테크 앱에서만 가능합니다."
                         FontSize="15"
                         Margin="0 40 0 0"
                         HorizontalAlignment="Center"

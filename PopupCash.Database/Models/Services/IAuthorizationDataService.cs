@@ -23,24 +23,17 @@ namespace PopupCash.Database.Models.Services
         public IEnumerable<string> SelectOrderByAccesToken(int limit);
 
         /// <summary>
-        /// Insert Authorization
+        /// Insert / Update Authorization
         /// </summary>
         /// <param name="authorization"></param>
         /// <returns></returns>
-        public bool InsertAuthorization(Authorization authorization);
-
-        /// <summary>
-        /// Update Authorization
-        /// </summary>
-        /// <param name="authorization"></param>
-        /// <returns></returns>
-        public bool UpdateAuthorization(Authorization authorization);
+        public bool InsertOrUpdateAuthorization(Authorization authorization);
 
         /// <summary>
         /// Delete Access Token
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteAuthorization(string id);
+        public bool DeleteAuthorization(string type);
     }
 }

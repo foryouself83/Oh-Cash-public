@@ -31,17 +31,30 @@ namespace PopupCash.Contents.Presentation.Behaviours
             Window parentWindow = Window.GetWindow(this.AssociatedObject);
             if (parentWindow != null)
             {
-                double left;
-                double top;
+                var mainWindow = System.Windows.Application.Current.MainWindow;
+                var screen = GetCurrentScreen(mainWindow);
 
                 parentWindow.WindowStartupLocation = WindowStartupLocation.Manual;
 
-                left = 10;
-                top = 10;
+                var left = mainWindow.Left + mainWindow.ActualWidth + 10;
+
+                if (left >= screen.WorkingArea.Left + screen.WorkingArea.Width - 400)
+                {
+                    left = mainWindow.Left - 10 - parentWindow.ActualWidth;
+                }
 
                 parentWindow.Left = left;
-                parentWindow.Top = top;
+                parentWindow.Top = mainWindow.Top;
             }
+        }
+        private System.Windows.Forms.Screen GetCurrentScreen(Window window)
+        {
+            // Get the handle for the window
+            var windowInteropHelper = new System.Windows.Interop.WindowInteropHelper(window);
+            IntPtr windowHandle = windowInteropHelper.Handle;
+
+            // Get the screen that contains the window
+            return System.Windows.Forms.Screen.FromHandle(windowHandle);
         }
     }
 }

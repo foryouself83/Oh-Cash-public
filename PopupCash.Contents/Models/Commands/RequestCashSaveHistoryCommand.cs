@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using PopupCash.Account.Models.Cashs;
 using PopupCash.Account.Models.Users.Impl;
 using PopupCash.Contents.Models.Cashs;
@@ -8,18 +9,23 @@ namespace PopupCash.Contents.Models.Commands
 {
     internal class RequestCashSaveHistoryCommand : ICommandAsync<CashHistory>
     {
+        private readonly IMapper _mapper;
+
         private readonly ICashService _cashService;
 
-        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
+
 
         private bool _canExecute = true;
 
         public event EventHandler? CanExecuteChanged;
 
-        public RequestCashSaveHistoryCommand(IMapper mapper, ICashService cashService)
+        public RequestCashSaveHistoryCommand(IMapper mapper, ICashService cashService,
+            ILogger<RequestCashSaveHistoryCommand> loggor)
         {
             _mapper = mapper;
             _cashService = cashService;
+            _logger = loggor;
         }
 
 
@@ -42,6 +48,7 @@ namespace PopupCash.Contents.Models.Commands
             }
             else
             {
+                _logger.LogDebug($"Result: {cashSaveHistoryResponse.Result}");
                 throw new Exception("적립 내역을 받는데 실패하였습니다.");
             }
         }

@@ -1,67 +1,57 @@
-﻿using System.IO;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Security.Cryptography;
 
 namespace PopupCash.Database.Models.Encryptors
 {
-    internal static class Encryptor
+    public static class Encryptor
     {
-        private static byte[] _saltKey = Encoding.UTF8.GetBytes("PopupCash-Enliple");
-        internal static byte[] EncryptTextToBytes(string text)
+        // Generate Key and IV using salt key
+        public static void GenerateKeyAndIV(byte[] saltKey, out byte[] key, out byte[] iv)
         {
-            try
+            int KeySize = 192; // 24 bytes for TripleDES
+            int BlockSize = 64; // 8 bytes for TripleDES
+
+            if (saltKey.Length < (KeySize / 8) + (BlockSize / 8))
+                throw new ArgumentException("Salt key is too short.");
+
+            key = new byte[KeySize / 8];
+            iv = new byte[BlockSize / 8];
+
+            Array.Copy(saltKey, 0, key, 0, KeySize / 8);
+            Array.Copy(saltKey, KeySize / 8, iv, 0, BlockSize / 8);
+        }
+        // Encrypt a string using TripleDES
+        public static string Encrypt(string plainText, byte[] key, byte[] iv)
+        {
+            using TripleDES tripleDES = TripleDES.Create();
+            tripleDES.Key = key;
+            tripleDES.IV = iv;
+            tripleDES.Padding = PaddingMode.PKCS7; // JSON data 누락 방지를 위한 패딩 설정
+
+            ICryptoTransform encryptor = tripleDES.CreateEncryptor(tripleDES.Key, tripleDES.IV);
+
+            using MemoryStream msEncrypt = new MemoryStream();
+            using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+            using (StreamWriter swEncrypt = new(csEncrypt))
             {
-                // Create or open the specified file.
-                using MemoryStream stream = new MemoryStream();
-                // Create a new TripleDES object.
-                using TripleDES tripleDes = TripleDES.Create();
-                // Create a TripleDES encryptor from the key and IV
-                using ICryptoTransform encryptor = tripleDes.CreateEncryptor(_saltKey, _saltKey);
-                // Create a CryptoStream using the FileStream and encryptor
-                using var cStream = new CryptoStream(stream, encryptor, CryptoStreamMode.Write);
-
-                // Convert the provided string to a byte array.
-                byte[] toEncrypt = Encoding.UTF8.GetBytes(text);
-
-                // Write the byte array to the crypto stream.
-                cStream.Write(toEncrypt, 0, toEncrypt.Length);
-
-                return stream.ToArray();
-
+                swEncrypt.Write(plainText);
             }
-            catch (CryptographicException e)
-            {
-                Console.WriteLine("A Cryptographic error occurred: {0}", e.Message);
-                throw;
-            }
+            return Convert.ToBase64String(msEncrypt.ToArray());
         }
 
-        internal static string DecryptTextFromBytes(byte[] chiperText)
+        // Decrypt a string using TripleDES
+        public static string Decrypt(string cipherText, byte[] key, byte[] iv)
         {
-            try
-            {
-                // Open the specified file
-                using (MemoryStream fStream = new MemoryStream(chiperText))
-                // Create a new TripleDES object.
-                using (TripleDES tripleDes = TripleDES.Create())
-                // Create a TripleDES decryptor from the key and IV
-                using (ICryptoTransform decryptor = tripleDes.CreateDecryptor(_saltKey, _saltKey))
-                // Create a CryptoStream using the FileStream and decryptor
-                using (var cStream = new CryptoStream(fStream, decryptor, CryptoStreamMode.Read))
-                // Create a StreamReader to turn the bytes back into text
-                using (StreamReader reader = new StreamReader(cStream, Encoding.UTF8))
-                {
-                    // Read back all of the text from the StreamReader, which receives
-                    // the decrypted bytes from the CryptoStream, which receives the
-                    // encrypted bytes from the FileStream.
-                    return reader.ReadToEnd();
-                }
-            }
-            catch (CryptographicException e)
-            {
-                Console.WriteLine("A Cryptographic error occurred: {0}", e.Message);
-                throw;
-            }
+            using TripleDES tripleDES = TripleDES.Create();
+            tripleDES.Key = key;
+            tripleDES.IV = iv;
+            tripleDES.Padding = PaddingMode.PKCS7; // JSON data 누락 방지를 위한 패딩 설정
+
+            ICryptoTransform decryptor = tripleDES.CreateDecryptor(tripleDES.Key, tripleDES.IV);
+
+            using MemoryStream msDecrypt = new MemoryStream(Convert.FromBase64String(cipherText));
+            using CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using StreamReader srDecrypt = new StreamReader(csDecrypt);
+            return srDecrypt.ReadToEnd();
         }
     }
 }

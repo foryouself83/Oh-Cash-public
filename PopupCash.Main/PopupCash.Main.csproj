@@ -10,8 +10,12 @@
 
   <ItemGroup>
     <None Remove="Resources\Images\GooglePlayLogo.png" />
+    <None Remove="Resources\Images\google_login.png" />
+    <None Remove="Resources\Images\kakao_login.png" />
+    <None Remove="Resources\Images\kakao_login_medium_wide.png" />
     <None Remove="Resources\Images\loginBackgruond.png" />
     <None Remove="Resources\Images\mainPoint.png" />
+    <None Remove="Resources\Images\naver_login.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,8 +35,11 @@
 
   <ItemGroup>
     <Resource Include="Resources\Images\GooglePlayLogo.png" />
+    <Resource Include="Resources\Images\google_login.png" />
+    <Resource Include="Resources\Images\kakao_login.png" />
     <Resource Include="Resources\Images\loginBackgruond.png" />
     <Resource Include="Resources\Images\mainPoint.png" />
+    <Resource Include="Resources\Images\naver_login.png" />
   </ItemGroup>
 
 </Project>

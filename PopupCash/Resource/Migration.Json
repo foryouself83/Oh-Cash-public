@@ -1,0 +1,16 @@
+{
+  "MigraionList": [
+    // 에러 나오는 테스트용 쿼리
+    //{
+    //  "Version": 1.1,
+    //  "Queries": [
+    //    "ALTER TABLE AUTHORIZATION ADD COLUMN WIDTH TEXT NOT NULL",
+    //    "ALTER TABLE AUTHORIZATION ADD COLUMN HEIGHT TEXT NOT NULL",
+    //    "UPDATE AUTHORIZATION SET WIDTH='100'",
+    //    "UPDATE AUTHORIZATION SET HEIGHT='200'"
+
+    //  ],
+    //  "UpdateDate": "2024-05-23T08:00:00"
+    //}
+  ]
+}

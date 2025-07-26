@@ -1,18 +1,29 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using Newtonsoft.Json;
+
 using NLog.Extensions.Logging;
+
 using PopupCash.Account.Extensions;
 using PopupCash.Account.Models.Login;
 using PopupCash.Account.Models.Login.Impl;
+using PopupCash.Account.Models.Users;
+using PopupCash.Account.Models.Users.Impl;
 using PopupCash.Common.Models.Dialogs.Parameters;
 using PopupCash.Common.ViewModels;
 using PopupCash.Common.Views;
 using PopupCash.Contents.Models.Modules;
 using PopupCash.Core.Models.Constants;
+using PopupCash.Database.Models.Encryptors;
+using PopupCash.Database.Models.Migrations;
 using PopupCash.Database.Models.Services;
 using PopupCash.Database.Models.Services.Impl;
 using PopupCash.Main.Models.Mappers;
@@ -20,6 +31,7 @@ using PopupCash.Main.Models.Modules;
 using PopupCash.Main.ViewModels;
 using PopupCash.Main.Views;
 using PopupCash.Views;
+
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Services.Dialogs;
@@ -104,9 +116,14 @@ namespace PopupCash
             containerRegistry.RegisterDialog<OpenSourceLicenseDialog, OpenSourceLicenseDialogViewModel>();
             containerRegistry.RegisterDialog<ActivityIndicator, ActivityIndicatorViewModel>();
 
-
             // rest api services
             containerRegistry.RegisterSingleton<ILoginService, LoginService>();
+            containerRegistry.RegisterSingleton<IUserService, UserService>();
+
+            // database services
+            containerRegistry.RegisterSingleton<IMigrationDatabaseService, MigrationDatabaseService>();
+            containerRegistry.RegisterSingleton<IAuthorizationDataService, AuthorizationDataService>();
+            containerRegistry.RegisterSingleton<IUserDataService, UserDataService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
@@ -114,9 +131,131 @@ namespace PopupCash
             moduleCatalog.AddModule<MainModuleContent>();
             moduleCatalog.AddModule<CashListModuleContent>();
         }
+        protected override async void OnInitialized()
+        {
+            // 서버에서 암호를 받아오는 비동기 메서드 호출
+            var loginService = Container.Resolve<ILoginService>();
+            var databaseFactory = Container.Resolve<IDatabaseFactory>();
+            var migrationDatabaseService = Container.Resolve<IMigrationDatabaseService>();
+            var authorizationService = Container.Resolve<IAuthorizationDataService>();
+            var userDataService = Container.Resolve<IUserDataService>();
+
+            try
+            {
+                // DataBase 암호 가져오기
+                var initResponse = await loginService.InitializeAsync();
+                if (initResponse.Result == 0)
+                {
+                    loginService.SetInitData(initResponse);
+                    if (string.IsNullOrEmpty(databaseFactory.Password) && !string.IsNullOrEmpty(initResponse.DatabasePassword))
+                        databaseFactory.Password = initResponse.DatabasePassword;
+                }
+                else throw new Exception("정상적으로 초기화가 이뤄지지 않았습니다. 재실행해 주시기 바랍니다.");
+                var salt = Encoding.UTF8.GetBytes($"{databaseFactory.Password}{databaseFactory.Password}{databaseFactory.Password}");
+                Encryptor.GenerateKeyAndIV(salt, out var key, out var iv);
+                #region Query 문 생성용
+                CreateEncryporMigrationFile(key, iv);
+                #endregion
+
+                // DB Table 생성
+                authorizationService.CreateTable();
+                userDataService.CreateTable();
+                migrationDatabaseService.CreateTable();
+
+                // DB Migration
+                MigrateDatabase(migrationDatabaseService, key, iv);
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex);
+
+                Environment.Exit(0);
+            }
+
+            base.OnInitialized();
+        }
+
+        [Conditional("DEBUG")]
+        private void CreateEncryporMigrationFile(byte[] key, byte[] iv)
+        {
+            string relativePath = @"..\..\..\..\..\Resource\";
+
+            string relativeSourcePath = @$"{relativePath}Migration.Json";
+            string sourcePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, relativeSourcePath));
+
+            if (!File.Exists(sourcePath)) throw new Exception("암호화 소스 파일이 없습니다.");
+            var plainText = File.ReadAllText(sourcePath);
+
+
+            string relativeTargetPath = @$"{relativePath}Migration.Dat";
+            string targetPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, relativeTargetPath));
+            if (Encryptor.Encrypt(plainText, key, iv) is not string encrypt) throw new Exception("데이터 마이그레이션 암호화에 실패하였습니다.");
+
+            if (!File.Exists(targetPath)) throw new Exception("암호화 대상 파일이 없습니다.");
+            File.WriteAllText(targetPath, encrypt);
+        }
+
+        private void MigrateDatabase(IMigrationDatabaseService migrationDatabaseService, byte[] key, byte[] iv)
+        {
+            var lastVersion = migrationDatabaseService.SelectLastVersion();
+
+            if (lastVersion == 0.0f)
+            {
+                migrationDatabaseService.InsertDatabaseVersion(new MigrationDatabase { Version = 1.0f, UpdateDate = DateTime.Now });
+                return;
+            }
+
+            var migrationDataPath = Path.Combine(Environment.CurrentDirectory, @"Resource\Migration.Dat");
+            var migrationData = ReadAndDeserializeMigrationData(migrationDataPath, key, iv);
+
+            if (migrationData?.MigraionList == null)
+            {
+                return;
+            }
+
+            foreach (var data in migrationData.MigraionList.OrderBy(m => m.Version))
+            {
+                if (data.Version > lastVersion)
+                {
+                    try
+                    {
+                        if (data.Queries is not null)
+                            migrationDatabaseService.ExecuteQuery(data.Queries);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"데이터베이스 마이그레이션 실패.\r\n version: {data.Version}\r\n{ex.Message}", ex);
+                    }
+                }
+            }
+        }
+
+        private MigraionJsonDataList? ReadAndDeserializeMigrationData(string filePath, byte[] key, byte[] iv)
+        {
+            var readText = ReadJsonFromFile(filePath, key, iv);
+            return JsonConvert.DeserializeObject<MigraionJsonDataList>(readText);
+        }
+
+        private void LogAndShowError(Exception ex)
+        {
+            NLog.LogManager.GetCurrentClassLogger().Error(ex);
+
+            var dialogService = Container.Resolve<IDialogService>();
+            dialogService.ShowDialog("InformationDialog",
+                new InformationDialogParameter(ex.Message, ConstantColors.DefaultMessageColor, FontWeights.Normal, string.Empty, ConstantColors.DefaultMessageColor, FontWeights.Normal, "확인", false, false),
+                (result) =>
+                {
+                    if (result.Result != ButtonResult.OK)
+                    {
+                        return;
+                    }
+                });
+        }
 
         protected override void Initialize()
         {
+            base.Initialize();
+
             Dispatcher.UnhandledExceptionFilter += Dispatcher_UnhandledExceptionFilter;
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 
@@ -124,9 +263,6 @@ namespace PopupCash
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-
-            base.Initialize();
-
         }
 
         private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -203,6 +339,23 @@ namespace PopupCash
                         break;
                     }
                 }
+            }
+        }
+
+        private string ReadJsonFromFile(string filePath, byte[] key, byte[] iv)
+        {
+            // 파일이 존재하는지 확인
+            if (!File.Exists(filePath)) throw new Exception("데이터베이스 마이그레이션 복호화 파일이 존재하지 않습니다.");
+            try
+            {
+                var cipherText = File.ReadAllText(filePath);
+
+                //var textData = File.ReadAllText(filePath);
+                return Encryptor.Decrypt(cipherText, key, iv);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"데이터 마이그레이션 복호화 오류: {ex.Message}", ex);
             }
         }
     }

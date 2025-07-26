@@ -46,7 +46,10 @@ namespace PopupCash.Models.Commands.Impl
         /// If the command does not require data to be passed,
         /// this object can be set to null.
         /// </param>
-        public abstract void Execute(object? parameter);
+        public virtual void Execute(object? parameter)
+        {
+            NLog.LogManager.GetCurrentClassLogger().Error($"{this.GetType().Name} Execute tryicon function");
+        }
 
         /// <summary>
         /// Defines the method that determines whether the command

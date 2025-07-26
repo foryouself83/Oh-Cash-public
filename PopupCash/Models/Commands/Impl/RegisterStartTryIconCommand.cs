@@ -13,6 +13,9 @@ namespace PopupCash.Models.Commands.Impl
         public override void Execute(object? parameter)
         {
             if (Assembly.GetEntryAssembly() is not Assembly assembly) return;
+
+            base.Execute(parameter);
+
             var exePath = assembly.Location;
 
             AddStartupProgram(_progamName, exePath);

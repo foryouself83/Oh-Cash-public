@@ -6,7 +6,8 @@ using Prism.Services.Dialogs;
 namespace PopupCash.Common.Models.Dialogs.Parameters
 {
     [ObservableObject]
-    public partial class InformationDialogParameter : DialogParameters
+    public partial class
+        InformationDialogParameter : DialogParameters
     {
         [ObservableProperty]
         private string _text;
@@ -36,11 +37,19 @@ namespace PopupCash.Common.Models.Dialogs.Parameters
         [ObservableProperty]
         public bool _isOkCancel;
 
+        [ObservableProperty]
+        public int _autoExit;
+
+        [ObservableProperty]
+        private string? _owendWindowTitle;
+
         // 매개변수로 받는 속성들을 초기화하는 생성자
         public InformationDialogParameter(string text, Brush textColor, FontWeight textFontWeight,
                                           string subText, Brush subTextColor, FontWeight subTextFontWeight,
                                           string confirmButtonText,
-                                          bool useSubText, bool isOkCancel)
+                                          bool useSubText, bool isOkCancel,
+                                          int autoExit = 0,
+                                          string? owendWindowTitle = null)
         {
             Text = text;
             TextColor = textColor;
@@ -51,6 +60,8 @@ namespace PopupCash.Common.Models.Dialogs.Parameters
             ConfirmButtonText = confirmButtonText;
             UseSubText = useSubText;
             IsOkCancel = isOkCancel;
+            _autoExit = autoExit;
+            _owendWindowTitle = owendWindowTitle;
         }
     }
 }

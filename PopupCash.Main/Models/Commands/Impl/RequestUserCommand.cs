@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
+using PopupCash.Account.Models.Helpers;
 using PopupCash.Account.Models.Users;
 using PopupCash.Account.Models.Users.Impl;
 using PopupCash.Core.Models.Commands;
@@ -9,18 +11,24 @@ namespace PopupCash.Main.Models.Commands.Impl
 {
     internal class RequestUserCommand : ICommandAsync<CurrentUser>
     {
+        private readonly IMapper _mapper;
+
         private readonly IUserService _userService;
 
-        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
+
 
         private bool _canExecute = true;
 
         public event EventHandler? CanExecuteChanged;
 
-        public RequestUserCommand(IMapper mapper, IUserService userService)
+        public RequestUserCommand(IMapper mapper, IUserService userService, ILogger<RequestUserCommand> logger)
         {
             _mapper = mapper;
+
             _userService = userService;
+
+            _logger = logger;
         }
 
 
@@ -37,14 +45,20 @@ namespace PopupCash.Main.Models.Commands.Impl
 
             if (loginResponse.Result == 0)
             {
-                CurrentUser user = _mapper.Map<CurrentUser>(loginResponse);
+                CurrentUser currentUser = _mapper.Map<CurrentUser>(loginResponse);
+                Debug.Assert(!string.IsNullOrEmpty(currentUser.Name), "Name is empty.");
 
-                Debug.Assert(!string.IsNullOrEmpty(user.Name), "Name is empty.");
+                currentUser.Mac ??= MacAddressHelper.GetMacAddress();
+                currentUser.AccessToken = accessToken;
 
-                return user;
+                Debug.Assert(!string.IsNullOrEmpty(currentUser.Mac), "Mac is empty.");
+
+                return currentUser;
             }
             else
             {
+                _logger.LogDebug($"Result: {loginResponse.Result}");
+
                 if (!string.IsNullOrEmpty(loginResponse.msg))
                     throw new Exception(loginResponse.msg);
                 else

@@ -42,7 +42,6 @@ namespace PopupCash.Common.Models.Commands.Impl
 
             if (_windowPositionDataService.SelectWindowPostion(windowId) is WindowPosition position)
             {
-
                 return position;
             }
             else

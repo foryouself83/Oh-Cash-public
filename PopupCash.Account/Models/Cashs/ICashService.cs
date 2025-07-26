@@ -19,10 +19,14 @@ namespace PopupCash.Account.Models.Cashs
         /// <returns></returns>
         public Task<PomissionAccessTokenResponse> GetAccessTokenPomissionAsync(string refreshToken);
 <<<<<<< HEAD
+<<<<<<< HEAD
         public Task<MissionParticipationResponse> MissionParticipationPomissionAsync(string accessToken, MissionParticipationRequest requestInfo);
 =======
         public Task<PomissionAccessTokenResponse> MissionParticipationPomissionAsync(string accessToken, MissionParticipationRequest requestInfo);
 >>>>>>> ba01ad0 (Feat: 미션 완료 적립 API 추가 진행 #1)
+=======
+        public Task<MissionParticipationResponse> MissionParticipationPomissionAsync(string accessToken, MissionParticipationRequest requestInfo);
+>>>>>>> 8b539a1 (Feat: 미션 완료 적립 API 추가)
         #endregion
     }
 }

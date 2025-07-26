@@ -1,9 +1,8 @@
-﻿using PopupCash.Contents.Models.Handlers.Scipts;
-using Prism.Events;
+﻿using Prism.Events;
 
 namespace PopupCash.Contents.Models.Events
 {
-    public class MissionScriptEvent : PubSubEvent<ResponseMissonScript?>
+    public class MissionScriptEvent : PubSubEvent<string>
     {
     }
 

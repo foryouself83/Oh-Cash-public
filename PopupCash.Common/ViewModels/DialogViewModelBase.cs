@@ -32,9 +32,10 @@ namespace PopupCash.Common.ViewModels
         public virtual Task LoadedDialog(RoutedEventArgs args)
         {
             if (args.OriginalSource is not DependencyObject dependencyObject) return Task.CompletedTask;
-            if (GetWindowPosition() is not WindowPosition windowPosition) return Task.CompletedTask;
-
             var window = Window.GetWindow(dependencyObject);
+
+            if (GetWindowPosition(window) is not WindowPosition windowPosition) return Task.CompletedTask;
+
 
             // 데이터 베이스에 위치 정보가 있는 경우 위치 설정
             window.WindowStartupLocation = WindowStartupLocation.Manual;

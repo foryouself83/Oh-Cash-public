@@ -39,7 +39,7 @@ namespace PopupCash.Contents.Presentation.Behaviours
                 if (parentWindow.Owner is not Window ownedWindow) return;
 
                 left = ownedWindow.Left;
-                top = ownedWindow.Top + ownedWindow.ActualHeight + 100;
+                top = ownedWindow.Top + ownedWindow.ActualHeight + 10;
 
                 parentWindow.Left = left;
                 parentWindow.Top = top;
